@@ -1,7 +1,9 @@
 const API =
 "https://apibuy.okla.de5.net"
 
+// =========================
 // 页面切换
+// =========================
 
 function showPage(pageId){
 
@@ -103,6 +105,8 @@ if(financeChart){
 // 获取订单
 // =========================
 
+let ALL_ORDERS = []
+
 async function loadOrders(){
 
   const box =
@@ -125,73 +129,9 @@ async function loadOrders(){
     const orders =
     await res.json()
 
-    // 空数据
+    ALL_ORDERS = orders
 
-    if(orders.length === 0){
-
-      box.innerHTML =
-      "<p>暂无订单</p>"
-
-      return
-
-    }
-
-    // 渲染
-
-    box.innerHTML =
-    ""
-
-    orders.forEach(order => {
-
-      box.innerHTML += `
-
-      <div class="order-card">
-
-        <h3>
-          ${order.customer || ""}
-        </h3>
-
-        <p>
-          商品：
-          ${order.product || ""}
-        </p>
-
-        <p>
-          平台：
-          ${order.platform || ""}
-        </p>
-
-        <p>
-          金额：
-          ¥ ${order.amount_cny || 0}
-        </p>
-
-        <p>
-          状态：
-          ${order.status || ""}
-        </p>
-
-        <div class="order-buttons">
-
-          <button
-            onclick="deleteOrder(${order.id})"
-          >
-            删除
-          </button>
-
-          <button
-            onclick="copyNotify(${order.id})"
-          >
-            通知物流
-          </button>
-
-        </div>
-
-      </div>
-
-      `
-
-    })
+    renderOrders(orders)
 
   }
 
@@ -201,6 +141,131 @@ async function loadOrders(){
     "订单加载失败"
 
   }
+
+}
+
+// =========================
+// 渲染订单
+// =========================
+
+function renderOrders(orders){
+
+  const box =
+  document.getElementById("ordersList")
+
+  if(orders.length === 0){
+
+    box.innerHTML =
+    "<p>暂无订单</p>"
+
+    return
+
+  }
+
+  box.innerHTML = ""
+
+  orders.forEach(order => {
+
+    box.innerHTML += `
+
+    <div class="order-card">
+
+      <h3>
+        ${order.customer || ""}
+      </h3>
+
+      <p>
+        商品：
+        ${order.product || ""}
+      </p>
+
+      <p>
+        平台：
+        ${order.platform || ""}
+      </p>
+
+      <p>
+        金额：
+        ¥ ${order.amount_cny || 0}
+      </p>
+
+      <p>
+        状态：
+        ${order.status || ""}
+      </p>
+
+      <div class="order-buttons">
+
+        <button
+          onclick="editOrder(${order.id})"
+        >
+          编辑
+        </button>
+
+        <button
+          onclick="deleteOrder(${order.id})"
+        >
+          删除
+        </button>
+
+        <button
+          onclick="changeStatus(${order.id})"
+        >
+          状态
+        </button>
+
+        <button
+          onclick="copyNotify(${order.id})"
+        >
+          通知物流
+        </button>
+
+      </div>
+
+    </div>
+
+    `
+
+  })
+
+}
+
+// =========================
+// 搜索
+// =========================
+
+function searchOrders(keyword){
+
+  keyword =
+  keyword.toLowerCase()
+
+  const result =
+
+  ALL_ORDERS.filter(order => {
+
+    return (
+
+      (order.customer || "")
+      .toLowerCase()
+      .includes(keyword)
+
+      ||
+
+      (order.product || "")
+      .toLowerCase()
+      .includes(keyword)
+
+      ||
+
+      (order.platform || "")
+      .toLowerCase()
+      .includes(keyword)
+
+    )
+
+  })
+
+  renderOrders(result)
 
 }
 
@@ -219,7 +284,7 @@ async function createOrder(){
   prompt("商品名称")
 
   const platform =
-  prompt("平台（淘宝/拼多多等）")
+  prompt("平台")
 
   const amount =
   prompt("金额")
@@ -286,8 +351,130 @@ async function deleteOrder(id){
     API + "/api/orders/delete/" + id,
 
     {
-
       method:"DELETE"
+    }
+
+  )
+
+  loadOrders()
+
+}
+
+// =========================
+// 编辑订单
+// =========================
+
+async function editOrder(id){
+
+  const order =
+  ALL_ORDERS.find(o => o.id == id)
+
+  if(!order) return
+
+  const customer =
+  prompt(
+    "客户",
+    order.customer
+  )
+
+  const product =
+  prompt(
+    "商品",
+    order.product
+  )
+
+  const platform =
+  prompt(
+    "平台",
+    order.platform
+  )
+
+  const amount =
+  prompt(
+    "金额",
+    order.amount_cny
+  )
+
+  await fetch(
+
+    API + "/api/orders/update/" + id,
+
+    {
+
+      method:"PUT",
+
+      headers:{
+        "Content-Type":"application/json"
+      },
+
+      body:JSON.stringify({
+
+        customer,
+        product,
+        platform,
+
+        amount_cny:amount,
+
+        status:order.status
+
+      })
+
+    }
+
+  )
+
+  alert("修改成功")
+
+  loadOrders()
+
+}
+
+// =========================
+// 状态切换
+// =========================
+
+async function changeStatus(id){
+
+  const order =
+  ALL_ORDERS.find(o => o.id == id)
+
+  if(!order) return
+
+  const status =
+  prompt(
+
+    `输入状态：
+
+待处理
+已下单
+已到仓
+已通知物流
+运输中
+已完成`,
+
+    order.status
+
+  )
+
+  if(!status) return
+
+  await fetch(
+
+    API + "/api/orders/status/" + id,
+
+    {
+
+      method:"PUT",
+
+      headers:{
+        "Content-Type":"application/json"
+      },
+
+      body:JSON.stringify({
+
+        status
+
+      })
 
     }
 
@@ -303,18 +490,8 @@ async function deleteOrder(id){
 
 async function copyNotify(id){
 
-  const res =
-  await fetch(
-
-    API + "/api/orders"
-
-  )
-
-  const orders =
-  await res.json()
-
   const order =
-  orders.find(o => o.id == id)
+  ALL_ORDERS.find(o => o.id == id)
 
   if(!order) return
 
