@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
 
   <meta charset="UTF-8" />
@@ -21,6 +22,26 @@
 </head>
 
 <body>
+
+  <!-- 未登录禁止进入 -->
+
+  <script>
+
+    if(
+
+      localStorage.getItem("erp_login")
+
+      !==
+
+      "true"
+
+    ){
+
+      location.href = "login.html"
+
+    }
+
+  </script>
 
   <!-- 左侧菜单 -->
 
@@ -69,7 +90,14 @@
       </div>
 
       <div class="top-user">
-        Admin
+
+        <button
+          onclick="logout()"
+          class="logout-btn"
+        >
+          退出登录
+        </button>
+
       </div>
 
     </header>
@@ -199,39 +227,26 @@
 
       <div class="page-header">
 
-        <h2>订单管理</h2>
+        <h2>
+          订单管理
+        </h2>
 
-        <button class="primary-btn">
+        <button
+          class="primary-btn"
+          onclick="createOrder()"
+        >
           + 新增订单
         </button>
 
       </div>
 
-      <div class="order-card">
+      <!-- 订单列表 -->
 
-        <h3>张三</h3>
+      <div id="ordersList">
 
-        <p>商品：衣服 2件</p>
-
-        <p>平台：淘宝</p>
-
-        <p>状态：运输中</p>
-
-        <div class="order-buttons">
-
-          <button>
-            编辑
-          </button>
-
-          <button>
-            通知物流
-          </button>
-
-          <button>
-            完成订单
-          </button>
-
-        </div>
+        <p>
+          正在加载订单...
+        </p>
 
       </div>
 
@@ -340,6 +355,20 @@
     </button>
 
   </nav>
+
+  <!-- 退出登录 -->
+
+  <script>
+
+    function logout(){
+
+      localStorage.removeItem("erp_login")
+
+      location.href = "login.html"
+
+    }
+
+  </script>
 
   <script src="app.js"></script>
 
