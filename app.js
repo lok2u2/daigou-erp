@@ -1,10 +1,136 @@
 const API =
 "https://apibuy.okla.de5.net"
 
-let ALL_ORDERS = []
-let ALL_CUSTOMERS = []
+// =========================
+// TOKEN
+// =========================
 
+const TOKEN =
+localStorage.getItem(
+  "erp_token"
+)
+
+const USER =
+JSON.parse(
+
+  localStorage.getItem(
+    "erp_user"
+  )
+
+  ||
+
+  "{}"
+
+)
+
+// =========================
+// 登录检测
+// =========================
+
+if(!TOKEN){
+
+  location.href =
+  "login.html"
+
+}
+
+// =========================
+// 用户显示
+// =========================
+
+window.addEventListener(
+
+  "DOMContentLoaded",
+
+  () => {
+
+    const topTitle =
+    document.querySelector(
+      ".top-title"
+    )
+
+    if(topTitle){
+
+      topTitle.innerHTML =
+
+      `
+      SaaS ERP 管理系统
+
+      <div
+        style="
+        margin-top:8px;
+        font-size:14px;
+        opacity:.7;
+        "
+      >
+
+      当前用户：
+
+      ${USER.username || ""}
+
+      (${USER.role || ""})
+
+      </div>
+      `
+
+    }
+
+  }
+
+)
+
+// =========================
+// API 请求
+// =========================
+
+async function api(
+
+  url,
+
+  options = {}
+
+){
+
+  // headers
+
+  options.headers = {
+
+    ...(options.headers || {}),
+
+    Authorization:
+    "Bearer " + TOKEN,
+
+    "Content-Type":
+    "application/json"
+
+  }
+
+  const res =
+  await fetch(
+
+    API + url,
+
+    options
+
+  )
+
+  // token失效
+
+  if(res.status === 401){
+
+    logout()
+
+    return
+
+  }
+
+  return res.json()
+
+}
+
+// =========================
 // 页面切换
+// =========================
 
 function showPage(pageId){
 
@@ -12,31 +138,43 @@ function showPage(pageId){
   .querySelectorAll(".page")
   .forEach(page => {
 
-    page.classList.remove("active")
+    page.classList.remove(
+      "active"
+    )
 
   })
 
   document
   .getElementById(pageId)
-  .classList.add("active")
+  .classList.add(
+    "active"
+  )
 
 }
 
+// =========================
+// 数据
+// =========================
+
+let ALL_ORDERS = []
+
+let ALL_CUSTOMERS = []
+
+// =========================
 // 加载订单
+// =========================
 
 async function loadOrders(){
 
   try{
 
-    const res =
-    await fetch(
-      API + "/api/orders"
-    )
-
     const orders =
-    await res.json()
+    await api("/api/orders")
 
-    ALL_ORDERS = orders
+    if(!orders) return
+
+    ALL_ORDERS =
+    orders
 
     renderOrders(orders)
 
@@ -52,15 +190,21 @@ async function loadOrders(){
 
 }
 
+// =========================
 // 渲染订单
+// =========================
 
 function renderOrders(orders){
 
   const box =
-  document.getElementById("ordersList")
+  document.getElementById(
+    "ordersList"
+  )
 
   const archive =
-  document.getElementById("archiveOrders")
+  document.getElementById(
+    "archiveOrders"
+  )
 
   if(!box) return
 
@@ -69,8 +213,12 @@ function renderOrders(orders){
 
   orders.forEach(order => {
 
-    const html = `
+    const isAdmin =
+    USER.role === "admin"
 
+    const html =
+
+    `
     <div class="order-card">
 
       <h3>
@@ -99,19 +247,37 @@ function renderOrders(orders){
 
       <div class="order-buttons">
 
-        <button onclick="editOrder(${order.id})">
+        <button
+          onclick="editOrder(${order.id})"
+        >
           编辑
         </button>
 
-        <button onclick="deleteOrder(${order.id})">
-          删除
-        </button>
+        ${
+          isAdmin
+          ?
 
-        <button onclick="changeStatus(${order.id})">
+          `
+          <button
+            onclick="deleteOrder(${order.id})"
+          >
+            删除
+          </button>
+          `
+          :
+
+          ""
+        }
+
+        <button
+          onclick="changeStatus(${order.id})"
+        >
           状态
         </button>
 
-        <button onclick="copyNotify(${order.id})">
+        <button
+          onclick="copyNotify(${order.id})"
+        >
           通知物流
         </button>
 
@@ -120,15 +286,22 @@ function renderOrders(orders){
     </div>
     `
 
-    if(order.status === "已完成"){
+    if(
 
-      archive.innerHTML += html
+      order.status ===
+      "已完成"
+
+    ){
+
+      archive.innerHTML +=
+      html
 
     }
 
     else{
 
-      box.innerHTML += html
+      box.innerHTML +=
+      html
 
     }
 
@@ -136,7 +309,9 @@ function renderOrders(orders){
 
 }
 
+// =========================
 // 搜索订单
+// =========================
 
 function searchOrders(keyword){
 
@@ -173,29 +348,35 @@ function searchOrders(keyword){
 
 }
 
-// 打开弹窗
+// =========================
+// 弹窗
+// =========================
 
 function openOrderModal(){
 
   document
-  .getElementById("orderModal")
+  .getElementById(
+    "orderModal"
+  )
   .style.display =
   "flex"
 
 }
 
-// 关闭弹窗
-
 function closeOrderModal(){
 
   document
-  .getElementById("orderModal")
+  .getElementById(
+    "orderModal"
+  )
   .style.display =
   "none"
 
 }
 
+// =========================
 // 新增订单
+// =========================
 
 async function submitOrder(){
 
@@ -227,17 +408,13 @@ async function submitOrder(){
 
   }
 
-  await fetch(
+  await api(
 
-    API + "/api/orders/create",
+    "/api/orders/create",
 
     {
 
       method:"POST",
-
-      headers:{
-        "Content-Type":"application/json"
-      },
 
       body:JSON.stringify({
 
@@ -273,18 +450,36 @@ async function submitOrder(){
 
 }
 
+// =========================
 // 删除订单
+// =========================
 
 async function deleteOrder(id){
+
+  // 管理员权限
+
+  if(
+
+    USER.role !== "admin"
+
+  ){
+
+    alert(
+      "只有管理员可删除"
+    )
+
+    return
+
+  }
 
   const ok =
   confirm("确定删除订单？")
 
   if(!ok) return
 
-  await fetch(
+  await api(
 
-    API + "/api/orders/delete/" + id,
+    "/api/orders/delete/" + id,
 
     {
       method:"DELETE"
@@ -296,45 +491,59 @@ async function deleteOrder(id){
 
 }
 
+// =========================
 // 编辑订单
+// =========================
 
 async function editOrder(id){
 
   const order =
-  ALL_ORDERS.find(o => o.id == id)
+  ALL_ORDERS.find(
+    o => o.id == id
+  )
 
   if(!order) return
 
   const customer =
-  prompt("客户", order.customer)
+  prompt(
+    "客户",
+    order.customer
+  )
 
   const product =
-  prompt("商品", order.product)
+  prompt(
+    "商品",
+    order.product
+  )
 
   const platform =
-  prompt("平台", order.platform)
+  prompt(
+    "平台",
+    order.platform
+  )
 
   const amount =
-  prompt("金额", order.amount_cny)
+  prompt(
+    "金额",
+    order.amount_cny
+  )
 
-  await fetch(
+  await api(
 
-    API + "/api/orders/update/" + id,
+    "/api/orders/update/" + id,
 
     {
 
       method:"PUT",
-
-      headers:{
-        "Content-Type":"application/json"
-      },
 
       body:JSON.stringify({
 
         customer,
         product,
         platform,
+
         amount_cny:amount,
+
         status:order.status
 
       })
@@ -347,37 +556,54 @@ async function editOrder(id){
 
 }
 
-// 状态
+// =========================
+// 修改状态
+// =========================
 
 async function changeStatus(id){
 
   const order =
-  ALL_ORDERS.find(o => o.id == id)
+  ALL_ORDERS.find(
+    o => o.id == id
+  )
 
   if(!order) return
 
   const status =
   prompt(
+
     "输入状态",
+
     order.status
+
   )
 
   if(!status) return
 
-  await fetch(
+  await api(
 
-    API + "/api/orders/status/" + id,
+    "/api/orders/update/" + id,
 
     {
 
       method:"PUT",
 
-      headers:{
-        "Content-Type":"application/json"
-      },
-
       body:JSON.stringify({
+
+        customer:
+        order.customer,
+
+        product:
+        order.product,
+
+        platform:
+        order.platform,
+
+        amount_cny:
+        order.amount_cny,
+
         status
+
       })
 
     }
@@ -388,30 +614,43 @@ async function changeStatus(id){
 
 }
 
-// 物流通知
+// =========================
+// 通知物流
+// =========================
 
 function copyNotify(id){
 
   const order =
-  ALL_ORDERS.find(o => o.id == id)
+  ALL_ORDERS.find(
+    o => o.id == id
+  )
 
   if(!order) return
 
   const text =
 
-`Khách hàng: ${order.customer}
+`Khách hàng:
+${order.customer}
 
-Sản phẩm: ${order.product}
+Sản phẩm:
+${order.product}
 
-Nền tảng: ${order.platform}`
+Nền tảng:
+${order.platform}
 
-  navigator.clipboard.writeText(text)
+Trạng thái:
+${order.status}`
 
-  alert("已复制物流通知")
+  navigator.clipboard
+  .writeText(text)
+
+  alert("物流通知已复制")
 
 }
 
-// 财务统计
+// =========================
+// 财务
+// =========================
 
 function updateFinance(orders){
 
@@ -425,7 +664,10 @@ function updateFinance(orders){
   orders.forEach(order => {
 
     totalRevenue +=
-    Number(order.amount_cny || 0)
+
+    Number(
+      order.amount_cny || 0
+    )
 
   })
 
@@ -452,6 +694,8 @@ function updateFinance(orders){
 
   0
 
+  // 首页
+
   document.getElementById(
     "todayRevenue"
   ).innerText =
@@ -466,6 +710,8 @@ function updateFinance(orders){
     "monthProfit"
   ).innerText =
   "¥ " + totalProfit
+
+  // 财务页
 
   document.getElementById(
     "financeRevenue"
@@ -491,7 +737,11 @@ function updateFinance(orders){
 
 }
 
+// =========================
 // 图表
+// =========================
+
+let salesChart = null
 
 function renderCharts(orders){
 
@@ -500,50 +750,71 @@ function renderCharts(orders){
 
   orders.forEach(order => {
 
-    labels.push(order.customer)
+    labels.push(
+      order.customer
+    )
 
     data.push(
-      Number(order.amount_cny || 0)
+
+      Number(
+        order.amount_cny || 0
+      )
+
     )
 
   })
 
-  const salesChart =
-  document.getElementById("salesChart")
+  const ctx =
+  document.getElementById(
+    "salesChart"
+  )
+
+  if(!ctx) return
 
   if(salesChart){
 
-    new Chart(salesChart, {
-
-      type:"bar",
-
-      data:{
-        labels,
-        datasets:[{
-          label:"营业额",
-          data
-        }]
-      }
-
-    })
+    salesChart.destroy()
 
   }
 
+  salesChart =
+
+  new Chart(ctx, {
+
+    type:"bar",
+
+    data:{
+
+      labels,
+
+      datasets:[{
+
+        label:"营业额",
+
+        data
+
+      }]
+
+    }
+
+  })
+
 }
 
+// =========================
 // 客户
+// =========================
 
 async function loadCustomers(){
 
   try{
 
-    const res =
-    await fetch(
-      API + "/api/customers"
+    const customers =
+    await api(
+      "/api/customers"
     )
 
-    const customers =
-    await res.json()
+    if(!customers) return
 
     ALL_CUSTOMERS =
     customers
@@ -573,8 +844,9 @@ function renderCustomers(customers){
 
   customers.forEach(customer => {
 
-    box.innerHTML += `
+    box.innerHTML +=
 
+    `
     <div class="order-card">
 
       <h3>
@@ -591,28 +863,28 @@ function renderCustomers(customers){
         ${customer.address || ""}
       </p>
 
-      <p>
-        累计消费：
-        ¥ ${customer.total_spent || 0}
-      </p>
-
-      <p>
-        订单数量：
-        ${customer.total_orders || 0}
-      </p>
-
       <div class="order-buttons">
 
-        <button
-          onclick="deleteCustomer(${customer.id})"
-        >
-          删除
-        </button>
+        ${
+          USER.role === "admin"
+
+          ?
+
+          `
+          <button
+            onclick="deleteCustomer(${customer.id})"
+          >
+            删除
+          </button>
+          `
+          :
+
+          ""
+        }
 
       </div>
 
     </div>
-
     `
 
   })
@@ -626,17 +898,17 @@ function searchCustomers(keyword){
 
   const result =
 
-  ALL_CUSTOMERS.filter(customer => {
+  ALL_CUSTOMERS.filter(c => {
 
     return (
 
-      (customer.name || "")
+      (c.name || "")
       .toLowerCase()
       .includes(keyword)
 
       ||
 
-      (customer.contact || "")
+      (c.contact || "")
       .toLowerCase()
       .includes(keyword)
 
@@ -647,6 +919,10 @@ function searchCustomers(keyword){
   renderCustomers(result)
 
 }
+
+// =========================
+// 新增客户
+// =========================
 
 async function createCustomer(){
 
@@ -664,17 +940,13 @@ async function createCustomer(){
   const note =
   prompt("备注")
 
-  await fetch(
+  await api(
 
-    API + "/api/customers/create",
+    "/api/customers/create",
 
     {
 
       method:"POST",
-
-      headers:{
-        "Content-Type":"application/json"
-      },
 
       body:JSON.stringify({
 
@@ -693,16 +965,34 @@ async function createCustomer(){
 
 }
 
+// =========================
+// 删除客户
+// =========================
+
 async function deleteCustomer(id){
+
+  if(
+
+    USER.role !== "admin"
+
+  ){
+
+    alert(
+      "只有管理员可删除"
+    )
+
+    return
+
+  }
 
   const ok =
   confirm("确定删除客户？")
 
   if(!ok) return
 
-  await fetch(
+  await api(
 
-    API + "/api/customers/delete/" + id,
+    "/api/customers/delete/" + id,
 
     {
       method:"DELETE"
@@ -714,11 +1004,14 @@ async function deleteCustomer(id){
 
 }
 
-// Excel
+// =========================
+// 导出 CSV
+// =========================
 
 function exportCSV(){
 
   let csv =
+
 `客户,商品,平台,金额,状态\n`
 
   ALL_ORDERS.forEach(order => {
@@ -734,9 +1027,16 @@ ${order.status}\n`
   })
 
   const blob =
-  new Blob([csv], {
-    type:"text/csv"
-  })
+
+  new Blob(
+
+    [csv],
+
+    {
+      type:"text/csv"
+    }
+
+  )
 
   const url =
   URL.createObjectURL(blob)
@@ -753,7 +1053,9 @@ ${order.status}\n`
 
 }
 
+// =========================
 // 深色模式
+// =========================
 
 function toggleTheme(){
 
@@ -764,33 +1066,51 @@ function toggleTheme(){
 
 }
 
+// =========================
 // 多语言
+// =========================
 
 function changeLanguage(lang){
 
   if(lang === "vi"){
 
-    alert("Đã chuyển sang tiếng Việt")
+    alert(
+      "Đã chuyển sang tiếng Việt"
+    )
 
   }
 
   else if(lang === "en"){
 
-    alert("Switched to English")
+    alert(
+      "Switched to English"
+    )
 
   }
 
   else{
 
-    alert("已切换中文")
+    alert(
+      "已切换中文"
+    )
 
   }
 
 }
 
-// 退出
+// =========================
+// 退出登录
+// =========================
 
 function logout(){
+
+  localStorage.removeItem(
+    "erp_token"
+  )
+
+  localStorage.removeItem(
+    "erp_user"
+  )
 
   localStorage.removeItem(
     "erp_login"
@@ -801,7 +1121,10 @@ function logout(){
 
 }
 
+// =========================
 // 启动
+// =========================
 
 loadOrders()
+
 loadCustomers()
