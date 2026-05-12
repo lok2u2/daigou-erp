@@ -111,8 +111,6 @@
 
       <div class="cards">
 
-        <!-- 今日营业额 -->
-
         <div class="card">
 
           <div class="card-title">
@@ -128,8 +126,6 @@
 
         </div>
 
-        <!-- 今日订单 -->
-
         <div class="card">
 
           <div class="card-title">
@@ -144,8 +140,6 @@
           </div>
 
         </div>
-
-        <!-- 本月利润 -->
 
         <div class="card">
 
@@ -187,49 +181,31 @@
           客户管理
         </h2>
 
-        <button class="primary-btn">
+        <button
+          class="primary-btn"
+          onclick="createCustomer()"
+        >
           + 新增客户
         </button>
 
       </div>
 
-      <div class="table-box">
+      <!-- 搜索 -->
 
-        <table>
+      <input
+        type="text"
+        placeholder="搜索客户 / 联系方式"
+        class="search-input"
+        oninput="searchCustomers(this.value)"
+      />
 
-          <thead>
+      <!-- 客户列表 -->
 
-            <tr>
+      <div id="customersList">
 
-              <th>客户</th>
-
-              <th>联系方式</th>
-
-              <th>地址</th>
-
-              <th>累计消费</th>
-
-            </tr>
-
-          </thead>
-
-          <tbody>
-
-            <tr>
-
-              <td>张三</td>
-
-              <td>微信 / Zalo</td>
-
-              <td>河内</td>
-
-              <td>¥ 2000</td>
-
-            </tr>
-
-          </tbody>
-
-        </table>
+        <p>
+          正在加载客户...
+        </p>
 
       </div>
 
@@ -301,8 +277,6 @@
 
       <div class="cards">
 
-        <!-- 总营业额 -->
-
         <div class="card">
 
           <div class="card-title">
@@ -317,8 +291,6 @@
           </div>
 
         </div>
-
-        <!-- 总利润 -->
 
         <div class="card">
 
