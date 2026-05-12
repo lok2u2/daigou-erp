@@ -1,29 +1,293 @@
 <!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>中越代购 ERP</title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  />
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+  <!-- 左侧菜单 -->
+
+  <aside class="sidebar">
+
+    <div class="logo">
+      中越代购 ERP
+    </div>
+
+    <div class="menu">
+
+      <button onclick="showPage('dashboard')">
+        🏠 首页
+      </button>
+
+      <button onclick="showPage('customers')">
+        👥 客户管理
+      </button>
+
+      <button onclick="showPage('orders')">
+        📦 订单管理
+      </button>
+
+      <button onclick="showPage('finance')">
+        💰 财务管理
+      </button>
+
+      <button onclick="showPage('settings')">
+        ⚙ 系统管理
+      </button>
+
+    </div>
+
+  </aside>
+
+  <!-- 主区域 -->
+
+  <main class="main">
+
+    <!-- 顶部 -->
+
+    <header class="topbar">
+
+      <div class="top-title">
+        SaaS ERP 管理系统
+      </div>
+
+      <div class="top-user">
+        Admin
+      </div>
+
+    </header>
+
+    <!-- 首页 -->
+
+    <section
+      id="dashboard"
+      class="page active"
+    >
+
+      <h2>首页仪表盘</h2>
+
+      <div class="cards">
+
+        <div class="card">
+
+          <div class="card-title">
+            今日营业额
+          </div>
+
+          <div class="card-value">
+            ¥ 0
+          </div>
+
+        </div>
+
+        <div class="card">
+
+          <div class="card-title">
+            今日订单
+          </div>
+
+          <div class="card-value">
+            0
+          </div>
+
+        </div>
+
+        <div class="card">
+
+          <div class="card-title">
+            本月利润
+          </div>
+
+          <div class="card-value">
+            ¥ 0
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="chart-box">
+
+        <canvas id="salesChart"></canvas>
+
+      </div>
+
+    </section>
+
+    <!-- 客户管理 -->
+
+    <section
+      id="customers"
+      class="page"
+    >
+
+      <div class="page-header">
+
+        <h2>客户管理</h2>
+
+        <button class="primary-btn">
+          + 新增客户
+        </button>
+
+      </div>
+
+      <div class="table-box">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>客户</th>
+
+              <th>微信 / Zalo</th>
+
+              <th>地址</th>
+
+              <th>累计消费</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            <tr>
+
+              <td>张三</td>
+
+              <td>zalo123</td>
+
+              <td>河内</td>
+
+              <td>¥ 2000</td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+    <!-- 订单管理 -->
+
+    <section
+      id="orders"
+      class="page"
+    >
+
+      <div class="page-header">
+
+        <h2>订单管理</h2>
+
+        <button class="primary-btn">
+          + 新增订单
+        </button>
+
+      </div>
+
+      <div class="order-card">
+
+        <h3>张三</h3>
+
+        <p>商品：衣服 2件</p>
+
+        <p>平台：淘宝</p>
+
+        <p>状态：运输中</p>
+
+        <div class="order-buttons">
+
+          <button>
+            编辑
+          </button>
+
+          <button>
+            通知物流
+          </button>
+
+          <button>
+            完成订单
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- 财务管理 -->
+
+    <section
+      id="finance"
+      class="page"
+    >
 
       <h2>财务管理</h2>
 
       <div class="cards">
 
         <div class="card">
-          <div>总营业额</div>
-          <h1>¥ 0</h1>
+
+          <div class="card-title">
+            总营业额
+          </div>
+
+          <div class="card-value">
+            ¥ 0
+          </div>
+
         </div>
 
         <div class="card">
-          <div>总利润</div>
-          <h1>¥ 0</h1>
+
+          <div class="card-title">
+            总利润
+          </div>
+
+          <div class="card-value">
+            ¥ 0
+          </div>
+
         </div>
 
       </div>
 
       <div class="chart-box">
+
         <canvas id="financeChart"></canvas>
+
       </div>
 
     </section>
 
     <!-- 系统管理 -->
-    <section id="settings" class="page">
+
+    <section
+      id="settings"
+      class="page"
+    >
 
       <h2>系统管理</h2>
 
@@ -52,6 +316,7 @@
   </main>
 
   <!-- 手机底部导航 -->
+
   <nav class="mobile-nav">
 
     <button onclick="showPage('dashboard')">
