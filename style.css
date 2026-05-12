@@ -2,15 +2,19 @@
 
   margin:0;
   padding:0;
+
   box-sizing:border-box;
 
-  font-family:sans-serif;
+  font-family:
+
+  -apple-system,
+  BlinkMacSystemFont,
+  "Segoe UI",
+  sans-serif;
 
 }
 
 body{
-
-  display:flex;
 
   background:#0f172a;
 
@@ -18,9 +22,13 @@ body{
 
   min-height:100vh;
 
+  display:flex;
+
 }
 
-/* 左侧 */
+/* =========================
+左侧菜单
+========================= */
 
 .sidebar{
 
@@ -35,6 +43,10 @@ body{
   top:0;
   left:0;
   bottom:0;
+
+  border-right:
+
+  1px solid rgba(255,255,255,.05);
 
 }
 
@@ -54,7 +66,7 @@ body{
 
   flex-direction:column;
 
-  gap:10px;
+  gap:12px;
 
 }
 
@@ -68,17 +80,27 @@ body{
 
   padding:14px;
 
-  border-radius:12px;
-
-  text-align:left;
+  border-radius:16px;
 
   cursor:pointer;
 
-  font-size:16px;
+  font-size:15px;
+
+  transition:.2s;
 
 }
 
-/* 主区域 */
+.menu button:hover{
+
+  background:#2563eb;
+
+  transform:translateY(-2px);
+
+}
+
+/* =========================
+主区域
+========================= */
 
 .main{
 
@@ -90,7 +112,9 @@ body{
 
 }
 
-/* 顶部 */
+/* =========================
+顶部
+========================= */
 
 .topbar{
 
@@ -100,15 +124,15 @@ body{
 
   align-items:center;
 
-  margin-bottom:20px;
+  margin-bottom:25px;
 
 }
 
 .top-title{
 
-  font-size:24px;
+  font-size:28px;
 
-  font-weight:bold;
+  font-weight:700;
 
 }
 
@@ -122,17 +146,23 @@ body{
 
   padding:12px 18px;
 
-  border-radius:12px;
+  border-radius:14px;
 
   cursor:pointer;
 
+  font-size:14px;
+
 }
 
-/* 页面 */
+/* =========================
+页面
+========================= */
 
 .page{
 
   display:none;
+
+  animation:fade .2s ease;
 
 }
 
@@ -142,7 +172,29 @@ body{
 
 }
 
-/* 卡片 */
+@keyframes fade{
+
+  from{
+
+    opacity:0;
+
+    transform:translateY(8px);
+
+  }
+
+  to{
+
+    opacity:1;
+
+    transform:none;
+
+  }
+
+}
+
+/* =========================
+卡片
+========================= */
 
 .cards{
 
@@ -161,9 +213,17 @@ body{
 
   background:#111827;
 
-  padding:20px;
+  padding:24px;
 
-  border-radius:20px;
+  border-radius:24px;
+
+  border:
+
+  1px solid rgba(255,255,255,.05);
+
+  box-shadow:
+
+  0 10px 30px rgba(0,0,0,.2);
 
 }
 
@@ -173,70 +233,41 @@ body{
 
   margin-bottom:10px;
 
+  font-size:14px;
+
 }
 
 .card-value{
 
-  font-size:28px;
+  font-size:32px;
 
-  font-weight:bold;
+  font-weight:700;
 
 }
 
-/* 图表 */
+/* =========================
+图表
+========================= */
 
 .chart-box{
+
+  margin-top:24px;
 
   background:#111827;
 
   padding:20px;
 
-  border-radius:20px;
+  border-radius:24px;
 
-  margin-top:20px;
+  border:
 
-}
-
-/* 表格 */
-
-.table-box{
-
-  margin-top:20px;
-
-  overflow:auto;
+  1px solid rgba(255,255,255,.05);
 
 }
 
-table{
-
-  width:100%;
-
-  border-collapse:collapse;
-
-  background:#111827;
-
-  border-radius:20px;
-
-  overflow:hidden;
-
-}
-
-th,
-td{
-
-  padding:16px;
-
-  text-align:left;
-
-}
-
-th{
-
-  background:#1e293b;
-
-}
-
-/* 页面头部 */
+/* =========================
+页面头部
+========================= */
 
 .page-header{
 
@@ -248,9 +279,15 @@ th{
 
   margin-bottom:20px;
 
+  gap:15px;
+
+  flex-wrap:wrap;
+
 }
 
-/* 按钮 */
+/* =========================
+按钮
+========================= */
 
 .primary-btn{
 
@@ -262,13 +299,55 @@ th{
 
   padding:14px 18px;
 
-  border-radius:12px;
+  border-radius:14px;
 
   cursor:pointer;
 
+  font-size:14px;
+
+  transition:.2s;
+
 }
 
-/* 订单卡片 */
+.primary-btn:hover{
+
+  transform:translateY(-2px);
+
+  opacity:.9;
+
+}
+
+/* =========================
+搜索框
+========================= */
+
+.search-input{
+
+  width:100%;
+
+  background:#111827;
+
+  border:
+
+  1px solid rgba(255,255,255,.05);
+
+  color:white;
+
+  padding:15px;
+
+  border-radius:16px;
+
+  margin-bottom:20px;
+
+  outline:none;
+
+  font-size:15px;
+
+}
+
+/* =========================
+订单卡片
+========================= */
 
 .order-card{
 
@@ -276,25 +355,41 @@ th{
 
   padding:20px;
 
-  border-radius:20px;
+  border-radius:22px;
 
   margin-bottom:20px;
+
+  border:
+
+  1px solid rgba(255,255,255,.05);
+
+  box-shadow:
+
+  0 10px 20px rgba(0,0,0,.15);
 
 }
 
 .order-card h3{
 
-  margin-bottom:10px;
+  margin-bottom:14px;
+
+  font-size:20px;
 
 }
 
 .order-card p{
 
-  margin-bottom:8px;
+  margin-bottom:10px;
 
   opacity:.9;
 
+  line-height:1.5;
+
 }
+
+/* =========================
+订单按钮
+========================= */
 
 .order-buttons{
 
@@ -318,13 +413,23 @@ th{
 
   padding:10px 14px;
 
-  border-radius:10px;
+  border-radius:12px;
 
   cursor:pointer;
 
+  transition:.2s;
+
 }
 
-/* 设置 */
+.order-buttons button:hover{
+
+  background:#2563eb;
+
+}
+
+/* =========================
+设置
+========================= */
 
 .settings-grid{
 
@@ -345,35 +450,171 @@ th{
 
   padding:30px;
 
-  border-radius:20px;
+  border-radius:24px;
 
   text-align:center;
 
+  border:
+
+  1px solid rgba(255,255,255,.05);
+
+  transition:.2s;
+
 }
 
-/* 搜索框 */
+.setting-card:hover{
 
-.search-input{
+  transform:translateY(-4px);
+
+}
+
+/* =========================
+弹窗
+========================= */
+
+.modal{
+
+  display:none;
+
+  position:fixed;
+
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+
+  background:rgba(0,0,0,.65);
+
+  z-index:999;
+
+  justify-content:center;
+
+  align-items:center;
+
+  padding:20px;
+
+}
+
+.modal-content{
 
   width:100%;
 
-  padding:14px;
+  max-width:420px;
 
-  border:none;
+  background:#111827;
 
-  border-radius:12px;
+  padding:24px;
 
-  margin-bottom:20px;
+  border-radius:24px;
 
-  background:#1e293b;
+  display:flex;
 
-  color:white;
+  flex-direction:column;
 
-  font-size:16px;
+  gap:16px;
+
+  border:
+
+  1px solid rgba(255,255,255,.05);
 
 }
 
-/* 手机 */
+.modal-content h2{
+
+  margin-bottom:10px;
+
+}
+
+.modal-content input{
+
+  background:#1e293b;
+
+  border:none;
+
+  color:white;
+
+  padding:14px;
+
+  border-radius:14px;
+
+  outline:none;
+
+}
+
+.close-btn{
+
+  border:none;
+
+  background:#ef4444;
+
+  color:white;
+
+  padding:14px;
+
+  border-radius:14px;
+
+  cursor:pointer;
+
+}
+
+/* =========================
+归档标题
+========================= */
+
+.archive-title{
+
+  margin-top:40px;
+
+  margin-bottom:20px;
+
+  font-size:22px;
+
+}
+
+/* =========================
+表格
+========================= */
+
+.table-box{
+
+  overflow:auto;
+
+  border-radius:20px;
+
+}
+
+table{
+
+  width:100%;
+
+  border-collapse:collapse;
+
+  background:#111827;
+
+  border-radius:20px;
+
+  overflow:hidden;
+
+}
+
+th{
+
+  background:#1e293b;
+
+}
+
+th,
+td{
+
+  padding:16px;
+
+  text-align:left;
+
+}
+
+/* =========================
+手机端
+========================= */
 
 .mobile-nav{
 
@@ -381,9 +622,13 @@ th{
 
 }
 
-/* 响应式 */
-
 @media(max-width:768px){
+
+  body{
+
+    display:block;
+
+  }
 
   .sidebar{
 
@@ -395,7 +640,21 @@ th{
 
     margin-left:0;
 
+    padding:16px;
+
     padding-bottom:90px;
+
+  }
+
+  .top-title{
+
+    font-size:22px;
+
+  }
+
+  .cards{
+
+    grid-template-columns:1fr;
 
   }
 
@@ -406,9 +665,7 @@ th{
     position:fixed;
 
     bottom:0;
-
     left:0;
-
     right:0;
 
     background:#111827;
@@ -416,6 +673,12 @@ th{
     padding:10px;
 
     justify-content:space-around;
+
+    border-top:
+
+    1px solid rgba(255,255,255,.05);
+
+    z-index:999;
 
   }
 
@@ -428,6 +691,22 @@ th{
     color:white;
 
     font-size:24px;
+
+    cursor:pointer;
+
+  }
+
+  .page-header{
+
+    flex-direction:column;
+
+    align-items:stretch;
+
+  }
+
+  .primary-btn{
+
+    width:100%;
 
   }
 
