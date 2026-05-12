@@ -10,12 +10,35 @@
     content="width=device-width, initial-scale=1.0"
   />
 
-  <title>中越代购 ERP</title>
+  <title>
+    中越代购 ERP
+  </title>
+
+  <!-- PWA -->
+
+  <link
+    rel="manifest"
+    href="manifest.json"
+  />
+
+  <meta
+    name="theme-color"
+    content="#111827"
+  />
+
+  <link
+    rel="apple-touch-icon"
+    href="icon-192.png"
+  />
+
+  <!-- CSS -->
 
   <link
     rel="stylesheet"
     href="style.css"
   />
+
+  <!-- Chart -->
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -29,7 +52,9 @@
 
     if(
 
-      localStorage.getItem("erp_login")
+      localStorage.getItem(
+        "erp_login"
+      )
 
       !==
 
@@ -37,7 +62,8 @@
 
     ){
 
-      location.href = "login.html"
+      location.href =
+      "login.html"
 
     }
 
@@ -53,23 +79,33 @@
 
     <div class="menu">
 
-      <button onclick="showPage('dashboard')">
+      <button
+        onclick="showPage('dashboard')"
+      >
         🏠 首页
       </button>
 
-      <button onclick="showPage('customers')">
+      <button
+        onclick="showPage('customers')"
+      >
         👥 客户管理
       </button>
 
-      <button onclick="showPage('orders')">
+      <button
+        onclick="showPage('orders')"
+      >
         📦 订单管理
       </button>
 
-      <button onclick="showPage('finance')">
+      <button
+        onclick="showPage('finance')"
+      >
         💰 财务管理
       </button>
 
-      <button onclick="showPage('settings')">
+      <button
+        onclick="showPage('settings')"
+      >
         ⚙ 系统管理
       </button>
 
@@ -86,10 +122,14 @@
     <header class="topbar">
 
       <div class="top-title">
+
         SaaS ERP 管理系统
+
       </div>
 
       <div class="top-actions">
+
+        <!-- 多语言 -->
 
         <select
           id="languageSelect"
@@ -110,6 +150,8 @@
           </option>
 
         </select>
+
+        <!-- 退出 -->
 
         <button
           class="logout-btn"
@@ -182,6 +224,8 @@
 
       </div>
 
+      <!-- 图表 -->
+
       <div class="chart-box">
 
         <canvas id="salesChart"></canvas>
@@ -212,12 +256,16 @@
 
       </div>
 
+      <!-- 搜索 -->
+
       <input
         type="text"
         placeholder="搜索客户 / 联系方式"
         class="search-input"
         oninput="searchCustomers(this.value)"
       />
+
+      <!-- 客户列表 -->
 
       <div id="customersList">
 
@@ -251,12 +299,16 @@
 
       </div>
 
+      <!-- 搜索 -->
+
       <input
         type="text"
         placeholder="搜索客户 / 商品 / 平台"
         class="search-input"
         oninput="searchOrders(this.value)"
       />
+
+      <!-- 订单列表 -->
 
       <div id="ordersList">
 
@@ -265,6 +317,8 @@
         </p>
 
       </div>
+
+      <!-- 历史订单 -->
 
       <h3 class="archive-title">
         历史订单
@@ -373,6 +427,8 @@
 
       </div>
 
+      <!-- 图表 -->
+
       <div class="chart-box">
 
         <canvas id="financeChart"></canvas>
@@ -410,6 +466,14 @@
           数据备份
         </div>
 
+        <div class="setting-card">
+          PWA APP
+        </div>
+
+        <div class="setting-card">
+          离线缓存
+        </div>
+
       </div>
 
     </section>
@@ -420,23 +484,33 @@
 
   <nav class="mobile-nav">
 
-    <button onclick="showPage('dashboard')">
+    <button
+      onclick="showPage('dashboard')"
+    >
       🏠
     </button>
 
-    <button onclick="showPage('customers')">
+    <button
+      onclick="showPage('customers')"
+    >
       👥
     </button>
 
-    <button onclick="showPage('orders')">
+    <button
+      onclick="showPage('orders')"
+    >
       📦
     </button>
 
-    <button onclick="showPage('finance')">
+    <button
+      onclick="showPage('finance')"
+    >
       💰
     </button>
 
-    <button onclick="showPage('settings')">
+    <button
+      onclick="showPage('settings')"
+    >
       ⚙
     </button>
 
@@ -494,7 +568,36 @@
 
   </div>
 
+  <!-- app.js -->
+
   <script src="app.js"></script>
+
+  <!-- PWA -->
+
+  <script>
+
+    if(
+      "serviceWorker"
+      in navigator
+    ){
+
+      navigator
+      .serviceWorker
+      .register(
+        "./service-worker.js"
+      )
+
+      .then(() => {
+
+        console.log(
+          "Service Worker 已注册"
+        )
+
+      })
+
+    }
+
+  </script>
 
 </body>
 </html>
