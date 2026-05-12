@@ -111,17 +111,24 @@
 
       <div class="cards">
 
+        <!-- 今日营业额 -->
+
         <div class="card">
 
           <div class="card-title">
             今日营业额
           </div>
 
-          <div class="card-value">
+          <div
+            class="card-value"
+            id="todayRevenue"
+          >
             ¥ 0
           </div>
 
         </div>
+
+        <!-- 今日订单 -->
 
         <div class="card">
 
@@ -129,11 +136,16 @@
             今日订单
           </div>
 
-          <div class="card-value">
+          <div
+            class="card-value"
+            id="todayOrders"
+          >
             0
           </div>
 
         </div>
+
+        <!-- 本月利润 -->
 
         <div class="card">
 
@@ -141,13 +153,18 @@
             本月利润
           </div>
 
-          <div class="card-value">
+          <div
+            class="card-value"
+            id="monthProfit"
+          >
             ¥ 0
           </div>
 
         </div>
 
       </div>
+
+      <!-- 图表 -->
 
       <div class="chart-box">
 
@@ -233,7 +250,7 @@
 
         <button
           class="primary-btn"
-          onclick="createOrder()"
+          onclick="openOrderModal()"
         >
           + 新增订单
         </button>
@@ -259,6 +276,16 @@
 
       </div>
 
+      <!-- 历史订单 -->
+
+      <h3 class="archive-title">
+        历史订单
+      </h3>
+
+      <div id="archiveOrders">
+
+      </div>
+
     </section>
 
     <!-- 财务管理 -->
@@ -274,17 +301,24 @@
 
       <div class="cards">
 
+        <!-- 总营业额 -->
+
         <div class="card">
 
           <div class="card-title">
             总营业额
           </div>
 
-          <div class="card-value">
+          <div
+            class="card-value"
+            id="financeRevenue"
+          >
             ¥ 0
           </div>
 
         </div>
+
+        <!-- 总利润 -->
 
         <div class="card">
 
@@ -292,13 +326,18 @@
             总利润
           </div>
 
-          <div class="card-value">
+          <div
+            class="card-value"
+            id="financeProfit"
+          >
             ¥ 0
           </div>
 
         </div>
 
       </div>
+
+      <!-- 财务图表 -->
 
       <div class="chart-box">
 
@@ -369,19 +408,57 @@
 
   </nav>
 
-  <!-- 退出登录 -->
+  <!-- 新增订单弹窗 -->
 
-  <script>
+  <div
+    id="orderModal"
+    class="modal"
+  >
 
-    function logout(){
+    <div class="modal-content">
 
-      localStorage.removeItem("erp_login")
+      <h2>
+        新增订单
+      </h2>
 
-      location.href = "login.html"
+      <input
+        id="customerInput"
+        placeholder="客户名称"
+      />
 
-    }
+      <input
+        id="productInput"
+        placeholder="商品名称"
+      />
 
-  </script>
+      <input
+        id="platformInput"
+        placeholder="平台"
+      />
+
+      <input
+        id="amountInput"
+        placeholder="金额"
+        type="number"
+      />
+
+      <button
+        onclick="submitOrder()"
+        class="primary-btn"
+      >
+        保存订单
+      </button>
+
+      <button
+        onclick="closeOrderModal()"
+        class="close-btn"
+      >
+        关闭
+      </button>
+
+    </div>
+
+  </div>
 
   <script src="app.js"></script>
 
