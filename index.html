@@ -23,7 +23,7 @@
 
 <body>
 
-  <!-- 未登录禁止进入 -->
+  <!-- 登录检测 -->
 
   <script>
 
@@ -89,16 +89,12 @@
         SaaS ERP 管理系统
       </div>
 
-      <div class="top-user">
-
-        <button
-          onclick="logout()"
-          class="logout-btn"
-        >
-          退出登录
-        </button>
-
-      </div>
+      <button
+        class="logout-btn"
+        onclick="logout()"
+      >
+        退出登录
+      </button>
 
     </header>
 
@@ -109,7 +105,9 @@
       class="page active"
     >
 
-      <h2>首页仪表盘</h2>
+      <h2>
+        首页仪表盘
+      </h2>
 
       <div class="cards">
 
@@ -168,7 +166,9 @@
 
       <div class="page-header">
 
-        <h2>客户管理</h2>
+        <h2>
+          客户管理
+        </h2>
 
         <button class="primary-btn">
           + 新增客户
@@ -186,7 +186,7 @@
 
               <th>客户</th>
 
-              <th>微信 / Zalo</th>
+              <th>联系方式</th>
 
               <th>地址</th>
 
@@ -202,7 +202,7 @@
 
               <td>张三</td>
 
-              <td>zalo123</td>
+              <td>微信 / Zalo</td>
 
               <td>河内</td>
 
@@ -240,6 +240,15 @@
 
       </div>
 
+      <!-- 搜索 -->
+
+      <input
+        type="text"
+        placeholder="搜索客户 / 商品 / 平台"
+        class="search-input"
+        oninput="searchOrders(this.value)"
+      />
+
       <!-- 订单列表 -->
 
       <div id="ordersList">
@@ -259,7 +268,9 @@
       class="page"
     >
 
-      <h2>财务管理</h2>
+      <h2>
+        财务管理
+      </h2>
 
       <div class="cards">
 
@@ -304,7 +315,9 @@
       class="page"
     >
 
-      <h2>系统管理</h2>
+      <h2>
+        系统管理
+      </h2>
 
       <div class="settings-grid">
 
