@@ -79,33 +79,27 @@
 
     <div class="menu">
 
-      <button
-        onclick="showPage('dashboard')"
-      >
+      <button onclick="showPage('dashboard')">
         🏠 首页
       </button>
 
-      <button
-        onclick="showPage('customers')"
-      >
+      <button onclick="showPage('customers')">
         👥 客户管理
       </button>
 
-      <button
-        onclick="showPage('orders')"
-      >
+      <button onclick="showPage('orders')">
         📦 订单管理
       </button>
 
-      <button
-        onclick="showPage('finance')"
-      >
+      <button onclick="showPage('packages')">
+        🚚 包裹管理
+      </button>
+
+      <button onclick="showPage('finance')">
         💰 财务管理
       </button>
 
-      <button
-        onclick="showPage('settings')"
-      >
+      <button onclick="showPage('settings')">
         ⚙ 系统管理
       </button>
 
@@ -256,16 +250,12 @@
 
       </div>
 
-      <!-- 搜索 -->
-
       <input
         type="text"
         placeholder="搜索客户 / 联系方式"
         class="search-input"
         oninput="searchCustomers(this.value)"
       />
-
-      <!-- 客户列表 -->
 
       <div id="customersList">
 
@@ -299,16 +289,12 @@
 
       </div>
 
-      <!-- 搜索 -->
-
       <input
         type="text"
         placeholder="搜索客户 / 商品 / 平台"
         class="search-input"
         oninput="searchOrders(this.value)"
       />
-
-      <!-- 订单列表 -->
 
       <div id="ordersList">
 
@@ -318,13 +304,133 @@
 
       </div>
 
-      <!-- 历史订单 -->
-
       <h3 class="archive-title">
         历史订单
       </h3>
 
       <div id="archiveOrders">
+
+      </div>
+
+    </section>
+
+    <!-- 包裹管理 -->
+
+    <section
+      id="packages"
+      class="page"
+    >
+
+      <div class="page-header">
+
+        <h2>
+          包裹管理
+        </h2>
+
+        <button
+          class="primary-btn"
+          onclick="openPackageModal()"
+        >
+          + 新增包裹
+        </button>
+
+      </div>
+
+      <input
+        type="text"
+        placeholder="搜索客户 / 快递单号"
+        class="search-input"
+        oninput="searchPackages(this.value)"
+      />
+
+      <!-- 包裹统计 -->
+
+      <div class="cards">
+
+        <div class="card">
+
+          <div class="card-title">
+            包裹总数
+          </div>
+
+          <div
+            class="card-value"
+            id="packageTotal"
+          >
+            0
+          </div>
+
+        </div>
+
+        <div class="card">
+
+          <div class="card-title">
+            已到仓
+          </div>
+
+          <div
+            class="card-value"
+            id="packageArrived"
+          >
+            0
+          </div>
+
+        </div>
+
+        <div class="card">
+
+          <div class="card-title">
+            已发货
+          </div>
+
+          <div
+            class="card-value"
+            id="packageShipped"
+          >
+            0
+          </div>
+
+        </div>
+
+        <div class="card">
+
+          <div class="card-title">
+            总运费
+          </div>
+
+          <div
+            class="card-value"
+            id="packageFeeTotal"
+          >
+            ¥ 0
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- 包裹列表 -->
+
+      <div
+        id="packagesList"
+        style="margin-top:20px;"
+      >
+
+        <p>
+          正在加载包裹...
+        </p>
+
+      </div>
+
+      <!-- 已完成 -->
+
+      <h3 class="archive-title">
+
+        已完成包裹
+
+      </h3>
+
+      <div id="packageArchive">
 
       </div>
 
@@ -410,24 +516,7 @@
 
         </div>
 
-        <div class="card">
-
-          <div class="card-title">
-            越南盾营业额
-          </div>
-
-          <div
-            class="card-value"
-            id="financeVND"
-          >
-            ₫ 0
-          </div>
-
-        </div>
-
       </div>
-
-      <!-- 图表 -->
 
       <div class="chart-box">
 
@@ -470,10 +559,6 @@
           PWA APP
         </div>
 
-        <div class="setting-card">
-          离线缓存
-        </div>
-
       </div>
 
     </section>
@@ -484,33 +569,27 @@
 
   <nav class="mobile-nav">
 
-    <button
-      onclick="showPage('dashboard')"
-    >
+    <button onclick="showPage('dashboard')">
       🏠
     </button>
 
-    <button
-      onclick="showPage('customers')"
-    >
+    <button onclick="showPage('customers')">
       👥
     </button>
 
-    <button
-      onclick="showPage('orders')"
-    >
+    <button onclick="showPage('orders')">
       📦
     </button>
 
-    <button
-      onclick="showPage('finance')"
-    >
+    <button onclick="showPage('packages')">
+      🚚
+    </button>
+
+    <button onclick="showPage('finance')">
       💰
     </button>
 
-    <button
-      onclick="showPage('settings')"
-    >
+    <button onclick="showPage('settings')">
       ⚙
     </button>
 
@@ -568,6 +647,84 @@
 
   </div>
 
+  <!-- 新增包裹弹窗 -->
+
+  <div
+    id="packageModal"
+    class="modal"
+  >
+
+    <div class="modal-content">
+
+      <h2>
+        新增包裹
+      </h2>
+
+      <input
+        id="packageCustomer"
+        placeholder="客户名称"
+      />
+
+      <input
+        id="packageTracking"
+        placeholder="快递单号"
+      />
+
+      <input
+        id="packageFee"
+        type="number"
+        placeholder="运费"
+      />
+
+      <input
+        id="packageWeight"
+        type="number"
+        placeholder="重量 KG"
+      />
+
+      <select id="packageStatus">
+
+        <option value="已到仓">
+          已到仓
+        </option>
+
+        <option value="已通知物流">
+          已通知物流
+        </option>
+
+        <option value="已发货">
+          已发货
+        </option>
+
+        <option value="已完成">
+          已完成
+        </option>
+
+      </select>
+
+      <input
+        id="packageNote"
+        placeholder="物流备注"
+      />
+
+      <button
+        class="primary-btn"
+        onclick="submitPackage()"
+      >
+        保存包裹
+      </button>
+
+      <button
+        class="close-btn"
+        onclick="closePackageModal()"
+      >
+        关闭
+      </button>
+
+    </div>
+
+  </div>
+
   <!-- app.js -->
 
   <script src="app.js"></script>
@@ -586,14 +743,6 @@
       .register(
         "./service-worker.js"
       )
-
-      .then(() => {
-
-        console.log(
-          "Service Worker 已注册"
-        )
-
-      })
 
     }
 
