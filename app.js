@@ -1,6 +1,10 @@
 const API =
 "https://apibuy.okla.de5.net"
 
+// 全部订单
+
+let ALL_ORDERS = []
+
 // =========================
 // 页面切换
 // =========================
@@ -22,100 +26,10 @@ function showPage(pageId){
 }
 
 // =========================
-// 图表
+// 加载订单
 // =========================
-
-const salesChart =
-document.getElementById('salesChart')
-
-if(salesChart){
-
-  new Chart(salesChart, {
-
-    type:'bar',
-
-    data:{
-
-      labels:[
-        '周一',
-        '周二',
-        '周三',
-        '周四',
-        '周五'
-      ],
-
-      datasets:[{
-
-        label:'营业额',
-
-        data:[
-          120,
-          190,
-          300,
-          250,
-          400
-        ]
-
-      }]
-
-    }
-
-  })
-
-}
-
-const financeChart =
-document.getElementById('financeChart')
-
-if(financeChart){
-
-  new Chart(financeChart, {
-
-    type:'line',
-
-    data:{
-
-      labels:[
-        '1月',
-        '2月',
-        '3月',
-        '4月'
-      ],
-
-      datasets:[{
-
-        label:'利润',
-
-        data:[
-          500,
-          800,
-          650,
-          1200
-        ]
-
-      }]
-
-    }
-
-  })
-
-}
-
-// =========================
-// 获取订单
-// =========================
-
-let ALL_ORDERS = []
 
 async function loadOrders(){
-
-  const box =
-  document.getElementById("ordersList")
-
-  if(!box) return
-
-  box.innerHTML =
-  "加载中..."
 
   try{
 
@@ -133,12 +47,13 @@ async function loadOrders(){
 
     renderOrders(orders)
 
+    updateFinance(orders)
+
   }
 
   catch(err){
 
-    box.innerHTML =
-    "订单加载失败"
+    console.log(err)
 
   }
 
@@ -153,20 +68,17 @@ function renderOrders(orders){
   const box =
   document.getElementById("ordersList")
 
-  if(orders.length === 0){
+  const archive =
+  document.getElementById("archiveOrders")
 
-    box.innerHTML =
-    "<p>暂无订单</p>"
-
-    return
-
-  }
+  if(!box) return
 
   box.innerHTML = ""
+  archive.innerHTML = ""
 
   orders.forEach(order => {
 
-    box.innerHTML += `
+    const html = `
 
     <div class="order-card">
 
@@ -175,23 +87,19 @@ function renderOrders(orders){
       </h3>
 
       <p>
-        商品：
-        ${order.product || ""}
+        商品：${order.product || ""}
       </p>
 
       <p>
-        平台：
-        ${order.platform || ""}
+        平台：${order.platform || ""}
       </p>
 
       <p>
-        金额：
-        ¥ ${order.amount_cny || 0}
+        金额：¥ ${order.amount_cny || 0}
       </p>
 
       <p>
-        状态：
-        ${order.status || ""}
+        状态：${order.status || ""}
       </p>
 
       <div class="order-buttons">
@@ -225,6 +133,20 @@ function renderOrders(orders){
     </div>
 
     `
+
+    // 已完成 → 归档
+
+    if(order.status === "已完成"){
+
+      archive.innerHTML += html
+
+    }
+
+    else{
+
+      box.innerHTML += html
+
+    }
 
   })
 
@@ -270,24 +192,68 @@ function searchOrders(keyword){
 }
 
 // =========================
+// 打开弹窗
+// =========================
+
+function openOrderModal(){
+
+  document
+  .getElementById("orderModal")
+  .style.display =
+  "flex"
+
+}
+
+// =========================
+// 关闭弹窗
+// =========================
+
+function closeOrderModal(){
+
+  document
+  .getElementById("orderModal")
+  .style.display =
+  "none"
+
+}
+
+// =========================
 // 新增订单
 // =========================
 
-async function createOrder(){
+async function submitOrder(){
 
   const customer =
-  prompt("客户名称")
 
-  if(!customer) return
+  document
+  .getElementById("customerInput")
+  .value
 
   const product =
-  prompt("商品名称")
+
+  document
+  .getElementById("productInput")
+  .value
 
   const platform =
-  prompt("平台")
+
+  document
+  .getElementById("platformInput")
+  .value
 
   const amount =
-  prompt("金额")
+
+  document
+  .getElementById("amountInput")
+  .value
+
+  if(!customer){
+
+    alert("请输入客户")
+
+    return
+
+  }
 
   await fetch(
 
@@ -329,7 +295,7 @@ async function createOrder(){
 
   )
 
-  alert("新增成功")
+  closeOrderModal()
 
   loadOrders()
 
@@ -351,7 +317,9 @@ async function deleteOrder(id){
     API + "/api/orders/delete/" + id,
 
     {
+
       method:"DELETE"
+
     }
 
   )
@@ -372,28 +340,16 @@ async function editOrder(id){
   if(!order) return
 
   const customer =
-  prompt(
-    "客户",
-    order.customer
-  )
+  prompt("客户", order.customer)
 
   const product =
-  prompt(
-    "商品",
-    order.product
-  )
+  prompt("商品", order.product)
 
   const platform =
-  prompt(
-    "平台",
-    order.platform
-  )
+  prompt("平台", order.platform)
 
   const amount =
-  prompt(
-    "金额",
-    order.amount_cny
-  )
+  prompt("金额", order.amount_cny)
 
   await fetch(
 
@@ -412,9 +368,7 @@ async function editOrder(id){
         customer,
         product,
         platform,
-
         amount_cny:amount,
-
         status:order.status
 
       })
@@ -422,8 +376,6 @@ async function editOrder(id){
     }
 
   )
-
-  alert("修改成功")
 
   loadOrders()
 
@@ -443,7 +395,7 @@ async function changeStatus(id){
   const status =
   prompt(
 
-    `输入状态：
+`输入状态：
 
 待处理
 已下单
@@ -488,7 +440,7 @@ async function changeStatus(id){
 // 通知物流
 // =========================
 
-async function copyNotify(id){
+function copyNotify(id){
 
   const order =
   ALL_ORDERS.find(o => o.id == id)
@@ -508,6 +460,159 @@ Vui lòng gửi hàng về Hà Nội.`
   navigator.clipboard.writeText(text)
 
   alert("已复制越南文通知")
+
+}
+
+// =========================
+// 财务统计
+// =========================
+
+function updateFinance(orders){
+
+  // 总营业额
+
+  let totalRevenue = 0
+
+  // 总订单
+
+  let totalOrders =
+  orders.length
+
+  orders.forEach(order => {
+
+    totalRevenue +=
+    Number(order.amount_cny || 0)
+
+  })
+
+  // 首页
+
+  document.getElementById(
+    "todayRevenue"
+  ).innerText =
+  "¥ " + totalRevenue
+
+  document.getElementById(
+    "todayOrders"
+  ).innerText =
+  totalOrders
+
+  document.getElementById(
+    "monthProfit"
+  ).innerText =
+  "¥ " + totalRevenue
+
+  // 财务页
+
+  document.getElementById(
+    "financeRevenue"
+  ).innerText =
+  "¥ " + totalRevenue
+
+  document.getElementById(
+    "financeProfit"
+  ).innerText =
+  "¥ " + totalRevenue
+
+  renderCharts(orders)
+
+}
+
+// =========================
+// 图表
+// =========================
+
+function renderCharts(orders){
+
+  const labels = []
+  const data = []
+
+  orders.forEach(order => {
+
+    labels.push(order.customer)
+
+    data.push(
+      Number(order.amount_cny || 0)
+    )
+
+  })
+
+  // 首页图表
+
+  const salesChart =
+  document.getElementById(
+    'salesChart'
+  )
+
+  if(salesChart){
+
+    new Chart(salesChart, {
+
+      type:'bar',
+
+      data:{
+
+        labels,
+
+        datasets:[{
+
+          label:'营业额',
+
+          data
+
+        }]
+
+      }
+
+    })
+
+  }
+
+  // 财务图表
+
+  const financeChart =
+  document.getElementById(
+    'financeChart'
+  )
+
+  if(financeChart){
+
+    new Chart(financeChart, {
+
+      type:'line',
+
+      data:{
+
+        labels,
+
+        datasets:[{
+
+          label:'利润',
+
+          data
+
+        }]
+
+      }
+
+    })
+
+  }
+
+}
+
+// =========================
+// 退出登录
+// =========================
+
+function logout(){
+
+  localStorage.removeItem(
+    "erp_login"
+  )
+
+  location.href =
+  "login.html"
 
 }
 
