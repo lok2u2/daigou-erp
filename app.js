@@ -1,9 +1,13 @@
 const API =
 "https://apibuy.okla.de5.net"
 
-// 全部订单
+// =========================
+// 全局数据
+// =========================
 
 let ALL_ORDERS = []
+
+let ALL_CUSTOMERS = []
 
 // =========================
 // 页面切换
@@ -12,16 +16,16 @@ let ALL_ORDERS = []
 function showPage(pageId){
 
   document
-    .querySelectorAll('.page')
-    .forEach(page => {
+  .querySelectorAll(".page")
+  .forEach(page => {
 
-      page.classList.remove('active')
+    page.classList.remove("active")
 
-    })
+  })
 
   document
-    .getElementById(pageId)
-    .classList.add('active')
+  .getElementById(pageId)
+  .classList.add("active")
 
 }
 
@@ -87,19 +91,23 @@ function renderOrders(orders){
       </h3>
 
       <p>
-        商品：${order.product || ""}
+        商品：
+        ${order.product || ""}
       </p>
 
       <p>
-        平台：${order.platform || ""}
+        平台：
+        ${order.platform || ""}
       </p>
 
       <p>
-        金额：¥ ${order.amount_cny || 0}
+        金额：
+        ¥ ${order.amount_cny || 0}
       </p>
 
       <p>
-        状态：${order.status || ""}
+        状态：
+        ${order.status || ""}
       </p>
 
       <div class="order-buttons">
@@ -134,7 +142,7 @@ function renderOrders(orders){
 
     `
 
-    // 已完成 → 归档
+    // 已完成 → 自动归档
 
     if(order.status === "已完成"){
 
@@ -153,7 +161,7 @@ function renderOrders(orders){
 }
 
 // =========================
-// 搜索
+// 搜索订单
 // =========================
 
 function searchOrders(keyword){
@@ -192,7 +200,7 @@ function searchOrders(keyword){
 }
 
 // =========================
-// 打开弹窗
+// 新增订单弹窗
 // =========================
 
 function openOrderModal(){
@@ -204,10 +212,6 @@ function openOrderModal(){
 
 }
 
-// =========================
-// 关闭弹窗
-// =========================
-
 function closeOrderModal(){
 
   document
@@ -218,34 +222,30 @@ function closeOrderModal(){
 }
 
 // =========================
-// 新增订单
+// 提交订单
 // =========================
 
 async function submitOrder(){
 
   const customer =
-
-  document
-  .getElementById("customerInput")
-  .value
+  document.getElementById(
+    "customerInput"
+  ).value
 
   const product =
-
-  document
-  .getElementById("productInput")
-  .value
+  document.getElementById(
+    "productInput"
+  ).value
 
   const platform =
-
-  document
-  .getElementById("platformInput")
-  .value
+  document.getElementById(
+    "platformInput"
+  ).value
 
   const amount =
-
-  document
-  .getElementById("amountInput")
-  .value
+  document.getElementById(
+    "amountInput"
+  ).value
 
   if(!customer){
 
@@ -299,6 +299,8 @@ async function submitOrder(){
 
   loadOrders()
 
+  loadCustomers()
+
 }
 
 // =========================
@@ -308,7 +310,7 @@ async function submitOrder(){
 async function deleteOrder(id){
 
   const ok =
-  confirm("确定删除？")
+  confirm("确定删除订单？")
 
   if(!ok) return
 
@@ -317,9 +319,7 @@ async function deleteOrder(id){
     API + "/api/orders/delete/" + id,
 
     {
-
       method:"DELETE"
-
     }
 
   )
@@ -340,16 +340,28 @@ async function editOrder(id){
   if(!order) return
 
   const customer =
-  prompt("客户", order.customer)
+  prompt(
+    "客户",
+    order.customer
+  )
 
   const product =
-  prompt("商品", order.product)
+  prompt(
+    "商品",
+    order.product
+  )
 
   const platform =
-  prompt("平台", order.platform)
+  prompt(
+    "平台",
+    order.platform
+  )
 
   const amount =
-  prompt("金额", order.amount_cny)
+  prompt(
+    "金额",
+    order.amount_cny
+  )
 
   await fetch(
 
@@ -368,7 +380,9 @@ async function editOrder(id){
         customer,
         product,
         platform,
+
         amount_cny:amount,
+
         status:order.status
 
       })
@@ -437,7 +451,7 @@ async function changeStatus(id){
 }
 
 // =========================
-// 通知物流
+// 物流通知
 // =========================
 
 function copyNotify(id){
@@ -469,11 +483,7 @@ Vui lòng gửi hàng về Hà Nội.`
 
 function updateFinance(orders){
 
-  // 总营业额
-
   let totalRevenue = 0
-
-  // 总订单
 
   let totalOrders =
   orders.length
@@ -541,14 +551,14 @@ function renderCharts(orders){
 
   const salesChart =
   document.getElementById(
-    'salesChart'
+    "salesChart"
   )
 
   if(salesChart){
 
     new Chart(salesChart, {
 
-      type:'bar',
+      type:"bar",
 
       data:{
 
@@ -556,7 +566,7 @@ function renderCharts(orders){
 
         datasets:[{
 
-          label:'营业额',
+          label:"营业额",
 
           data
 
@@ -572,14 +582,14 @@ function renderCharts(orders){
 
   const financeChart =
   document.getElementById(
-    'financeChart'
+    "financeChart"
   )
 
   if(financeChart){
 
     new Chart(financeChart, {
 
-      type:'line',
+      type:"line",
 
       data:{
 
@@ -587,7 +597,7 @@ function renderCharts(orders){
 
         datasets:[{
 
-          label:'利润',
+          label:"利润",
 
           data
 
@@ -598,6 +608,208 @@ function renderCharts(orders){
     })
 
   }
+
+}
+
+// =========================
+// 加载客户
+// =========================
+
+async function loadCustomers(){
+
+  try{
+
+    const res =
+    await fetch(
+
+      API + "/api/customers"
+
+    )
+
+    const customers =
+    await res.json()
+
+    ALL_CUSTOMERS = customers
+
+    renderCustomers(customers)
+
+  }
+
+  catch(err){
+
+    console.log(err)
+
+  }
+
+}
+
+// =========================
+// 渲染客户
+// =========================
+
+function renderCustomers(customers){
+
+  const box =
+  document.getElementById(
+    "customersList"
+  )
+
+  if(!box) return
+
+  box.innerHTML = ""
+
+  customers.forEach(customer => {
+
+    box.innerHTML += `
+
+    <div class="order-card">
+
+      <h3>
+        ${customer.name || ""}
+      </h3>
+
+      <p>
+        联系方式：
+        ${customer.contact || ""}
+      </p>
+
+      <p>
+        地址：
+        ${customer.address || ""}
+      </p>
+
+      <p>
+        累计消费：
+        ¥ ${customer.total_spent || 0}
+      </p>
+
+      <p>
+        订单数量：
+        ${customer.total_orders || 0}
+      </p>
+
+      <div class="order-buttons">
+
+        <button
+          onclick="deleteCustomer(${customer.id})"
+        >
+          删除
+        </button>
+
+      </div>
+
+    </div>
+
+    `
+
+  })
+
+}
+
+// =========================
+// 搜索客户
+// =========================
+
+function searchCustomers(keyword){
+
+  keyword =
+  keyword.toLowerCase()
+
+  const result =
+
+  ALL_CUSTOMERS.filter(customer => {
+
+    return (
+
+      (customer.name || "")
+      .toLowerCase()
+      .includes(keyword)
+
+      ||
+
+      (customer.contact || "")
+      .toLowerCase()
+      .includes(keyword)
+
+    )
+
+  })
+
+  renderCustomers(result)
+
+}
+
+// =========================
+// 新增客户
+// =========================
+
+async function createCustomer(){
+
+  const name =
+  prompt("客户名称")
+
+  if(!name) return
+
+  const contact =
+  prompt("联系方式")
+
+  const address =
+  prompt("地址")
+
+  const note =
+  prompt("备注")
+
+  await fetch(
+
+    API + "/api/customers/create",
+
+    {
+
+      method:"POST",
+
+      headers:{
+        "Content-Type":"application/json"
+      },
+
+      body:JSON.stringify({
+
+        name,
+        contact,
+        address,
+        note
+
+      })
+
+    }
+
+  )
+
+  loadCustomers()
+
+}
+
+// =========================
+// 删除客户
+// =========================
+
+async function deleteCustomer(id){
+
+  const ok =
+  confirm("确定删除客户？")
+
+  if(!ok) return
+
+  await fetch(
+
+    API + "/api/customers/delete/" + id,
+
+    {
+      method:"DELETE"
+    }
+
+  )
+
+  loadCustomers()
 
 }
 
@@ -616,6 +828,10 @@ function logout(){
 
 }
 
+// =========================
 // 启动
+// =========================
 
 loadOrders()
+
+loadCustomers()
