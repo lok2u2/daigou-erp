@@ -12,11 +12,13 @@ function showPage(pageId){
 
 }
 
-// 首页图表
-const ctx1 = document
+/* 首页图表 */
+
+const salesChart =
+document
   .getElementById('salesChart')
 
-new Chart(ctx1, {
+new Chart(salesChart, {
 
   type:'bar',
 
@@ -48,11 +50,13 @@ new Chart(ctx1, {
 
 })
 
-// 财务图表
-const ctx2 = document
+/* 财务图表 */
+
+const financeChart =
+document
   .getElementById('financeChart')
 
-new Chart(ctx2, {
+new Chart(financeChart, {
 
   type:'line',
 
