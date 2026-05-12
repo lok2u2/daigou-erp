@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+      <h2>财务管理</h2>
+
+      <div class="cards">
+
+        <div class="card">
+          <div>总营业额</div>
+          <h1>¥ 0</h1>
+        </div>
+
+        <div class="card">
+          <div>总利润</div>
+          <h1>¥ 0</h1>
+        </div>
+
+      </div>
+
+      <div class="chart-box">
+        <canvas id="financeChart"></canvas>
+      </div>
+
+    </section>
+
+    <!-- 系统管理 -->
+    <section id="settings" class="page">
+
+      <h2>系统管理</h2>
+
+      <div class="settings-grid">
+
+        <div class="setting-card">
+          修改密码
+        </div>
+
+        <div class="setting-card">
+          多语言
+        </div>
+
+        <div class="setting-card">
+          深色模式
+        </div>
+
+        <div class="setting-card">
+          数据备份
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- 手机底部导航 -->
+  <nav class="mobile-nav">
+
+    <button onclick="showPage('dashboard')">
+      🏠
+    </button>
+
+    <button onclick="showPage('customers')">
+      👥
+    </button>
+
+    <button onclick="showPage('orders')">
+      📦
+    </button>
+
+    <button onclick="showPage('finance')">
+      💰
+    </button>
+
+    <button onclick="showPage('settings')">
+      ⚙
+    </button>
+
+  </nav>
+
+  <script src="app.js"></script>
+
+</body>
+</html>
