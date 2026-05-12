@@ -10,7 +10,9 @@
     content="width=device-width, initial-scale=1.0"
   />
 
-  <title>ERP 登录</title>
+  <title>
+    ERP 登录
+  </title>
 
   <style>
 
@@ -18,12 +20,21 @@
       margin:0;
       padding:0;
       box-sizing:border-box;
-      font-family:sans-serif;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
     }
 
     body{
 
-      background:#0f172a;
+      background:
+
+      linear-gradient(
+        135deg,
+        #0f172a,
+        #111827,
+        #1e293b
+      );
+
+      min-height:100vh;
 
       display:flex;
 
@@ -31,80 +42,156 @@
 
       align-items:center;
 
-      height:100vh;
-
-      color:white;
+      padding:20px;
 
     }
 
     .login-box{
 
-      width:90%;
-      max-width:400px;
+      width:100%;
+      max-width:420px;
 
-      background:#111827;
+      background:
 
-      padding:30px;
+      rgba(17,24,39,.95);
 
-      border-radius:20px;
+      border:
+
+      1px solid rgba(255,255,255,.05);
+
+      backdrop-filter:blur(20px);
+
+      border-radius:28px;
+
+      padding:40px;
+
+      color:white;
+
+      box-shadow:
+
+      0 10px 40px rgba(0,0,0,.4);
 
     }
 
-    h1{
+    .logo{
 
       text-align:center;
 
-      margin-bottom:30px;
+      font-size:34px;
+
+      font-weight:700;
+
+      margin-bottom:10px;
 
     }
 
-    .input{
+    .sub{
+
+      text-align:center;
+
+      opacity:.7;
+
+      margin-bottom:35px;
+
+    }
+
+    .input-group{
+
+      margin-bottom:18px;
+
+    }
+
+    .input-group label{
+
+      display:block;
+
+      margin-bottom:8px;
+
+      opacity:.8;
+
+      font-size:14px;
+
+    }
+
+    .input-group input{
 
       width:100%;
 
-      padding:14px;
+      background:#1e293b;
 
       border:none;
 
-      border-radius:12px;
-
-      margin-bottom:20px;
-
-      background:#1e293b;
-
       color:white;
+
+      padding:16px;
+
+      border-radius:16px;
+
+      outline:none;
 
       font-size:16px;
 
     }
 
-    .btn{
+    .login-btn{
 
       width:100%;
 
       border:none;
-
-      padding:14px;
-
-      border-radius:12px;
 
       background:#2563eb;
 
       color:white;
 
+      padding:16px;
+
+      border-radius:18px;
+
       font-size:16px;
 
       cursor:pointer;
+
+      margin-top:10px;
+
+      transition:.2s;
+
+    }
+
+    .login-btn:hover{
+
+      transform:translateY(-2px);
+
+      background:#3b82f6;
+
+    }
+
+    .tips{
+
+      margin-top:25px;
+
+      background:#0f172a;
+
+      border-radius:18px;
+
+      padding:18px;
+
+      font-size:14px;
+
+      line-height:1.8;
+
+      opacity:.8;
 
     }
 
     .error{
 
-      margin-top:15px;
+      color:#f87171;
 
-      color:#ef4444;
+      margin-top:14px;
 
       text-align:center;
+
+      display:none;
 
     }
 
@@ -116,65 +203,90 @@
 
   <div class="login-box">
 
-    <h1>
+    <div class="logo">
+
       中越代购 ERP
-    </h1>
 
-    <input
+    </div>
 
-      type="password"
+    <div class="sub">
 
-      id="password"
+      企业级 SaaS 管理系统
 
-      class="input"
+    </div>
 
-      placeholder="请输入系统密码"
+    <div class="input-group">
 
-    />
+      <label>
+        用户名
+      </label>
+
+      <input
+        id="username"
+        placeholder="请输入用户名"
+      />
+
+    </div>
+
+    <div class="input-group">
+
+      <label>
+        密码
+      </label>
+
+      <input
+        id="password"
+        type="password"
+        placeholder="请输入密码"
+      />
+
+    </div>
 
     <button
-
-      class="btn"
-
+      class="login-btn"
       onclick="login()"
-
     >
-
       登录系统
-
     </button>
 
     <div
-
       id="error"
-
       class="error"
+    >
+      登录失败
+    </div>
 
-    ></div>
+    <div class="tips">
+
+      <div>
+        管理员：admin / 123456
+      </div>
+
+      <div>
+        员工账号：staff / 123456
+      </div>
+
+    </div>
 
   </div>
 
   <script>
 
-    // API 地址
-
     const API =
-
     "https://apibuy.okla.de5.net"
 
-    // 自动登录
+    // 已登录
 
     if(
 
-      localStorage.getItem("erp_login")
-
-      ===
-
-      "true"
+      localStorage.getItem(
+        "erp_token"
+      )
 
     ){
 
-      location.href = "index.html"
+      location.href =
+      "index.html"
 
     }
 
@@ -182,63 +294,100 @@
 
     async function login(){
 
+      const username =
+      document.getElementById(
+        "username"
+      ).value
+
       const password =
+      document.getElementById(
+        "password"
+      ).value
 
-      document
-      .getElementById("password")
-      .value
+      try{
 
-      const res =
+        const res =
+        await fetch(
 
-      await fetch(
+          API + "/api/login",
 
-        API + "/api/login",
+          {
 
-        {
+            method:"POST",
 
-          method:"POST",
+            headers:{
+              "Content-Type":"application/json"
+            },
 
-          headers:{
-            "Content-Type":"application/json"
-          },
+            body:JSON.stringify({
 
-          body:JSON.stringify({
+              username,
+              password
 
-            password
+            })
 
-          })
-
-        }
-
-      )
-
-      const data =
-      await res.json()
-
-      // 成功
-
-      if(data.success){
-
-        localStorage.setItem(
-
-          "erp_login",
-
-          "true"
+          }
 
         )
 
-        location.href = "index.html"
+        const data =
+        await res.json()
+
+        if(data.success){
+
+          // TOKEN
+
+          localStorage.setItem(
+
+            "erp_token",
+
+            data.token
+
+          )
+
+          // 用户信息
+
+          localStorage.setItem(
+
+            "erp_user",
+
+            JSON.stringify(
+              data.user
+            )
+
+          )
+
+          // 登录状态
+
+          localStorage.setItem(
+
+            "erp_login",
+
+            "true"
+
+          )
+
+          // 进入系统
+
+          location.href =
+          "index.html"
+
+        }
+
+        else{
+
+          document
+          .getElementById("error")
+          .style.display =
+          "block"
+
+        }
 
       }
 
-      // 失败
+      catch(err){
 
-      else{
-
-        document
-        .getElementById("error")
-        .innerText =
-        "密码错误"
+        console.log(err)
 
       }
 
