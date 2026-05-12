@@ -1,17 +1,10 @@
 const API =
 "https://apibuy.okla.de5.net"
 
-// =========================
-// 全局数据
-// =========================
-
 let ALL_ORDERS = []
-
 let ALL_CUSTOMERS = []
 
-// =========================
 // 页面切换
-// =========================
 
 function showPage(pageId){
 
@@ -29,9 +22,7 @@ function showPage(pageId){
 
 }
 
-// =========================
 // 加载订单
-// =========================
 
 async function loadOrders(){
 
@@ -39,9 +30,7 @@ async function loadOrders(){
 
     const res =
     await fetch(
-
       API + "/api/orders"
-
     )
 
     const orders =
@@ -63,9 +52,7 @@ async function loadOrders(){
 
 }
 
-// =========================
 // 渲染订单
-// =========================
 
 function renderOrders(orders){
 
@@ -112,37 +99,26 @@ function renderOrders(orders){
 
       <div class="order-buttons">
 
-        <button
-          onclick="editOrder(${order.id})"
-        >
+        <button onclick="editOrder(${order.id})">
           编辑
         </button>
 
-        <button
-          onclick="deleteOrder(${order.id})"
-        >
+        <button onclick="deleteOrder(${order.id})">
           删除
         </button>
 
-        <button
-          onclick="changeStatus(${order.id})"
-        >
+        <button onclick="changeStatus(${order.id})">
           状态
         </button>
 
-        <button
-          onclick="copyNotify(${order.id})"
-        >
+        <button onclick="copyNotify(${order.id})">
           通知物流
         </button>
 
       </div>
 
     </div>
-
     `
-
-    // 已完成 → 自动归档
 
     if(order.status === "已完成"){
 
@@ -160,9 +136,7 @@ function renderOrders(orders){
 
 }
 
-// =========================
 // 搜索订单
-// =========================
 
 function searchOrders(keyword){
 
@@ -199,9 +173,7 @@ function searchOrders(keyword){
 
 }
 
-// =========================
-// 新增订单弹窗
-// =========================
+// 打开弹窗
 
 function openOrderModal(){
 
@@ -212,6 +184,8 @@ function openOrderModal(){
 
 }
 
+// 关闭弹窗
+
 function closeOrderModal(){
 
   document
@@ -221,9 +195,7 @@ function closeOrderModal(){
 
 }
 
-// =========================
-// 提交订单
-// =========================
+// 新增订单
 
 async function submitOrder(){
 
@@ -299,13 +271,9 @@ async function submitOrder(){
 
   loadOrders()
 
-  loadCustomers()
-
 }
 
-// =========================
 // 删除订单
-// =========================
 
 async function deleteOrder(id){
 
@@ -328,9 +296,7 @@ async function deleteOrder(id){
 
 }
 
-// =========================
 // 编辑订单
-// =========================
 
 async function editOrder(id){
 
@@ -340,28 +306,16 @@ async function editOrder(id){
   if(!order) return
 
   const customer =
-  prompt(
-    "客户",
-    order.customer
-  )
+  prompt("客户", order.customer)
 
   const product =
-  prompt(
-    "商品",
-    order.product
-  )
+  prompt("商品", order.product)
 
   const platform =
-  prompt(
-    "平台",
-    order.platform
-  )
+  prompt("平台", order.platform)
 
   const amount =
-  prompt(
-    "金额",
-    order.amount_cny
-  )
+  prompt("金额", order.amount_cny)
 
   await fetch(
 
@@ -380,9 +334,7 @@ async function editOrder(id){
         customer,
         product,
         platform,
-
         amount_cny:amount,
-
         status:order.status
 
       })
@@ -395,9 +347,7 @@ async function editOrder(id){
 
 }
 
-// =========================
-// 状态切换
-// =========================
+// 状态
 
 async function changeStatus(id){
 
@@ -408,18 +358,8 @@ async function changeStatus(id){
 
   const status =
   prompt(
-
-`输入状态：
-
-待处理
-已下单
-已到仓
-已通知物流
-运输中
-已完成`,
-
+    "输入状态",
     order.status
-
   )
 
   if(!status) return
@@ -437,9 +377,7 @@ async function changeStatus(id){
       },
 
       body:JSON.stringify({
-
         status
-
       })
 
     }
@@ -450,9 +388,7 @@ async function changeStatus(id){
 
 }
 
-// =========================
 // 物流通知
-// =========================
 
 function copyNotify(id){
 
@@ -467,23 +403,21 @@ function copyNotify(id){
 
 Sản phẩm: ${order.product}
 
-Nền tảng: ${order.platform}
-
-Vui lòng gửi hàng về Hà Nội.`
+Nền tảng: ${order.platform}`
 
   navigator.clipboard.writeText(text)
 
-  alert("已复制越南文通知")
+  alert("已复制物流通知")
 
 }
 
-// =========================
 // 财务统计
-// =========================
 
 function updateFinance(orders){
 
   let totalRevenue = 0
+
+  let totalProfit = 0
 
   let totalOrders =
   orders.length
@@ -495,7 +429,28 @@ function updateFinance(orders){
 
   })
 
-  // 首页
+  totalProfit =
+  totalRevenue * 0.2
+
+  const vnd =
+  totalRevenue * 3500
+
+  const rate =
+
+  totalRevenue > 0
+
+  ?
+
+  (
+    totalProfit
+    /
+    totalRevenue
+    * 100
+  ).toFixed(1)
+
+  :
+
+  0
 
   document.getElementById(
     "todayRevenue"
@@ -510,9 +465,7 @@ function updateFinance(orders){
   document.getElementById(
     "monthProfit"
   ).innerText =
-  "¥ " + totalRevenue
-
-  // 财务页
+  "¥ " + totalProfit
 
   document.getElementById(
     "financeRevenue"
@@ -522,15 +475,23 @@ function updateFinance(orders){
   document.getElementById(
     "financeProfit"
   ).innerText =
-  "¥ " + totalRevenue
+  "¥ " + totalProfit
+
+  document.getElementById(
+    "financeVND"
+  ).innerText =
+  "₫ " + vnd.toLocaleString()
+
+  document.getElementById(
+    "profitRate"
+  ).innerText =
+  rate + "%"
 
   renderCharts(orders)
 
 }
 
-// =========================
 // 图表
-// =========================
 
 function renderCharts(orders){
 
@@ -547,12 +508,8 @@ function renderCharts(orders){
 
   })
 
-  // 首页图表
-
   const salesChart =
-  document.getElementById(
-    "salesChart"
-  )
+  document.getElementById("salesChart")
 
   if(salesChart){
 
@@ -561,48 +518,11 @@ function renderCharts(orders){
       type:"bar",
 
       data:{
-
         labels,
-
         datasets:[{
-
           label:"营业额",
-
           data
-
         }]
-
-      }
-
-    })
-
-  }
-
-  // 财务图表
-
-  const financeChart =
-  document.getElementById(
-    "financeChart"
-  )
-
-  if(financeChart){
-
-    new Chart(financeChart, {
-
-      type:"line",
-
-      data:{
-
-        labels,
-
-        datasets:[{
-
-          label:"利润",
-
-          data
-
-        }]
-
       }
 
     })
@@ -611,9 +531,7 @@ function renderCharts(orders){
 
 }
 
-// =========================
-// 加载客户
-// =========================
+// 客户
 
 async function loadCustomers(){
 
@@ -621,15 +539,14 @@ async function loadCustomers(){
 
     const res =
     await fetch(
-
       API + "/api/customers"
-
     )
 
     const customers =
     await res.json()
 
-    ALL_CUSTOMERS = customers
+    ALL_CUSTOMERS =
+    customers
 
     renderCustomers(customers)
 
@@ -642,10 +559,6 @@ async function loadCustomers(){
   }
 
 }
-
-// =========================
-// 渲染客户
-// =========================
 
 function renderCustomers(customers){
 
@@ -706,10 +619,6 @@ function renderCustomers(customers){
 
 }
 
-// =========================
-// 搜索客户
-// =========================
-
 function searchCustomers(keyword){
 
   keyword =
@@ -738,10 +647,6 @@ function searchCustomers(keyword){
   renderCustomers(result)
 
 }
-
-// =========================
-// 新增客户
-// =========================
 
 async function createCustomer(){
 
@@ -788,10 +693,6 @@ async function createCustomer(){
 
 }
 
-// =========================
-// 删除客户
-// =========================
-
 async function deleteCustomer(id){
 
   const ok =
@@ -813,9 +714,81 @@ async function deleteCustomer(id){
 
 }
 
-// =========================
-// 退出登录
-// =========================
+// Excel
+
+function exportCSV(){
+
+  let csv =
+`客户,商品,平台,金额,状态\n`
+
+  ALL_ORDERS.forEach(order => {
+
+    csv +=
+
+`${order.customer},
+${order.product},
+${order.platform},
+${order.amount_cny},
+${order.status}\n`
+
+  })
+
+  const blob =
+  new Blob([csv], {
+    type:"text/csv"
+  })
+
+  const url =
+  URL.createObjectURL(blob)
+
+  const a =
+  document.createElement("a")
+
+  a.href = url
+
+  a.download =
+  "orders.csv"
+
+  a.click()
+
+}
+
+// 深色模式
+
+function toggleTheme(){
+
+  document.body
+  .classList.toggle(
+    "light-mode"
+  )
+
+}
+
+// 多语言
+
+function changeLanguage(lang){
+
+  if(lang === "vi"){
+
+    alert("Đã chuyển sang tiếng Việt")
+
+  }
+
+  else if(lang === "en"){
+
+    alert("Switched to English")
+
+  }
+
+  else{
+
+    alert("已切换中文")
+
+  }
+
+}
+
+// 退出
 
 function logout(){
 
@@ -828,10 +801,7 @@ function logout(){
 
 }
 
-// =========================
 // 启动
-// =========================
 
 loadOrders()
-
 loadCustomers()
