@@ -91,8 +91,6 @@ async function api(
 
 ){
 
-  // headers
-
   options.headers = {
 
     ...(options.headers || {}),
@@ -113,8 +111,6 @@ async function api(
     options
 
   )
-
-  // token失效
 
   if(res.status === 401){
 
@@ -160,9 +156,13 @@ let ALL_ORDERS = []
 
 let ALL_CUSTOMERS = []
 
+let ALL_PACKAGES = []
+
 // =========================
+// 订单
+// =========================
+
 // 加载订单
-// =========================
 
 async function loadOrders(){
 
@@ -190,9 +190,7 @@ async function loadOrders(){
 
 }
 
-// =========================
 // 渲染订单
-// =========================
 
 function renderOrders(orders){
 
@@ -212,9 +210,6 @@ function renderOrders(orders){
   archive.innerHTML = ""
 
   orders.forEach(order => {
-
-    const isAdmin =
-    USER.role === "admin"
 
     const html =
 
@@ -254,7 +249,8 @@ function renderOrders(orders){
         </button>
 
         ${
-          isAdmin
+          USER.role === "admin"
+
           ?
 
           `
@@ -264,6 +260,7 @@ function renderOrders(orders){
             删除
           </button>
           `
+
           :
 
           ""
@@ -273,12 +270,6 @@ function renderOrders(orders){
           onclick="changeStatus(${order.id})"
         >
           状态
-        </button>
-
-        <button
-          onclick="copyNotify(${order.id})"
-        >
-          通知物流
         </button>
 
       </div>
@@ -309,9 +300,7 @@ function renderOrders(orders){
 
 }
 
-// =========================
 // 搜索订单
-// =========================
 
 function searchOrders(keyword){
 
@@ -348,9 +337,7 @@ function searchOrders(keyword){
 
 }
 
-// =========================
-// 弹窗
-// =========================
+// 打开订单弹窗
 
 function openOrderModal(){
 
@@ -363,6 +350,8 @@ function openOrderModal(){
 
 }
 
+// 关闭订单弹窗
+
 function closeOrderModal(){
 
   document
@@ -374,9 +363,7 @@ function closeOrderModal(){
 
 }
 
-// =========================
 // 新增订单
-// =========================
 
 async function submitOrder(){
 
@@ -450,18 +437,12 @@ async function submitOrder(){
 
 }
 
-// =========================
 // 删除订单
-// =========================
 
 async function deleteOrder(id){
 
-  // 管理员权限
-
   if(
-
     USER.role !== "admin"
-
   ){
 
     alert(
@@ -491,9 +472,7 @@ async function deleteOrder(id){
 
 }
 
-// =========================
 // 编辑订单
-// =========================
 
 async function editOrder(id){
 
@@ -556,9 +535,7 @@ async function editOrder(id){
 
 }
 
-// =========================
-// 修改状态
-// =========================
+// 修改订单状态
 
 async function changeStatus(id){
 
@@ -571,11 +548,8 @@ async function changeStatus(id){
 
   const status =
   prompt(
-
     "输入状态",
-
     order.status
-
   )
 
   if(!status) return
@@ -615,195 +589,10 @@ async function changeStatus(id){
 }
 
 // =========================
-// 通知物流
-// =========================
-
-function copyNotify(id){
-
-  const order =
-  ALL_ORDERS.find(
-    o => o.id == id
-  )
-
-  if(!order) return
-
-  const text =
-
-`Khách hàng:
-${order.customer}
-
-Sản phẩm:
-${order.product}
-
-Nền tảng:
-${order.platform}
-
-Trạng thái:
-${order.status}`
-
-  navigator.clipboard
-  .writeText(text)
-
-  alert("物流通知已复制")
-
-}
-
-// =========================
-// 财务
-// =========================
-
-function updateFinance(orders){
-
-  let totalRevenue = 0
-
-  let totalProfit = 0
-
-  let totalOrders =
-  orders.length
-
-  orders.forEach(order => {
-
-    totalRevenue +=
-
-    Number(
-      order.amount_cny || 0
-    )
-
-  })
-
-  totalProfit =
-  totalRevenue * 0.2
-
-  const vnd =
-  totalRevenue * 3500
-
-  const rate =
-
-  totalRevenue > 0
-
-  ?
-
-  (
-    totalProfit
-    /
-    totalRevenue
-    * 100
-  ).toFixed(1)
-
-  :
-
-  0
-
-  // 首页
-
-  document.getElementById(
-    "todayRevenue"
-  ).innerText =
-  "¥ " + totalRevenue
-
-  document.getElementById(
-    "todayOrders"
-  ).innerText =
-  totalOrders
-
-  document.getElementById(
-    "monthProfit"
-  ).innerText =
-  "¥ " + totalProfit
-
-  // 财务页
-
-  document.getElementById(
-    "financeRevenue"
-  ).innerText =
-  "¥ " + totalRevenue
-
-  document.getElementById(
-    "financeProfit"
-  ).innerText =
-  "¥ " + totalProfit
-
-  document.getElementById(
-    "financeVND"
-  ).innerText =
-  "₫ " + vnd.toLocaleString()
-
-  document.getElementById(
-    "profitRate"
-  ).innerText =
-  rate + "%"
-
-  renderCharts(orders)
-
-}
-
-// =========================
-// 图表
-// =========================
-
-let salesChart = null
-
-function renderCharts(orders){
-
-  const labels = []
-  const data = []
-
-  orders.forEach(order => {
-
-    labels.push(
-      order.customer
-    )
-
-    data.push(
-
-      Number(
-        order.amount_cny || 0
-      )
-
-    )
-
-  })
-
-  const ctx =
-  document.getElementById(
-    "salesChart"
-  )
-
-  if(!ctx) return
-
-  if(salesChart){
-
-    salesChart.destroy()
-
-  }
-
-  salesChart =
-
-  new Chart(ctx, {
-
-    type:"bar",
-
-    data:{
-
-      labels,
-
-      datasets:[{
-
-        label:"营业额",
-
-        data
-
-      }]
-
-    }
-
-  })
-
-}
-
-// =========================
 // 客户
 // =========================
+
+// 加载客户
 
 async function loadCustomers(){
 
@@ -830,6 +619,8 @@ async function loadCustomers(){
   }
 
 }
+
+// 渲染客户
 
 function renderCustomers(customers){
 
@@ -877,6 +668,7 @@ function renderCustomers(customers){
             删除
           </button>
           `
+
           :
 
           ""
@@ -890,6 +682,8 @@ function renderCustomers(customers){
   })
 
 }
+
+// 搜索客户
 
 function searchCustomers(keyword){
 
@@ -920,9 +714,7 @@ function searchCustomers(keyword){
 
 }
 
-// =========================
 // 新增客户
-// =========================
 
 async function createCustomer(){
 
@@ -965,16 +757,12 @@ async function createCustomer(){
 
 }
 
-// =========================
 // 删除客户
-// =========================
 
 async function deleteCustomer(id){
 
   if(
-
     USER.role !== "admin"
-
   ){
 
     alert(
@@ -1001,6 +789,563 @@ async function deleteCustomer(id){
   )
 
   loadCustomers()
+
+}
+
+// =========================
+// 包裹管理
+// =========================
+
+// 加载包裹
+
+async function loadPackages(){
+
+  try{
+
+    const packages =
+    await api("/api/warehouse")
+
+    if(!packages) return
+
+    ALL_PACKAGES =
+    packages
+
+    renderPackages(packages)
+
+  }
+
+  catch(err){
+
+    console.log(err)
+
+  }
+
+}
+
+// 渲染包裹
+
+function renderPackages(packages){
+
+  const box =
+  document.getElementById(
+    "packagesList"
+  )
+
+  const archive =
+  document.getElementById(
+    "packageArchive"
+  )
+
+  if(!box) return
+
+  box.innerHTML = ""
+  archive.innerHTML = ""
+
+  let arrived = 0
+  let shipped = 0
+  let totalFee = 0
+
+  packages.forEach(item => {
+
+    if(
+      item.warehouse_status ===
+      "已到仓"
+    ){
+
+      arrived++
+
+    }
+
+    if(
+      item.warehouse_status ===
+      "已发货"
+    ){
+
+      shipped++
+
+    }
+
+    totalFee +=
+    Number(
+      item.shipping_fee || 0
+    )
+
+    const html =
+
+    `
+    <div class="order-card">
+
+      <h3>
+        ${item.customer || ""}
+      </h3>
+
+      <p>
+        快递单号：
+        ${item.tracking_number || ""}
+      </p>
+
+      <p>
+        运费：
+        ¥ ${item.shipping_fee || 0}
+      </p>
+
+      <p>
+        重量：
+        ${item.weight || 0} KG
+      </p>
+
+      <p>
+        状态：
+        ${item.warehouse_status || ""}
+      </p>
+
+      <p>
+        备注：
+        ${item.warehouse_note || ""}
+      </p>
+
+      <div class="order-buttons">
+
+        <button
+          onclick="editPackage(${item.id})"
+        >
+          编辑
+        </button>
+
+        <button
+          onclick="changePackageStatus(${item.id})"
+        >
+          状态
+        </button>
+
+        ${
+          USER.role === "admin"
+
+          ?
+
+          `
+          <button
+            onclick="deletePackage(${item.id})"
+          >
+            删除
+          </button>
+          `
+
+          :
+
+          ""
+        }
+
+      </div>
+
+    </div>
+    `
+
+    if(
+
+      item.warehouse_status ===
+      "已完成"
+
+    ){
+
+      archive.innerHTML +=
+      html
+
+    }
+
+    else{
+
+      box.innerHTML +=
+      html
+
+    }
+
+  })
+
+  document.getElementById(
+    "packageTotal"
+  ).innerText =
+  packages.length
+
+  document.getElementById(
+    "packageArrived"
+  ).innerText =
+  arrived
+
+  document.getElementById(
+    "packageShipped"
+  ).innerText =
+  shipped
+
+  document.getElementById(
+    "packageFeeTotal"
+  ).innerText =
+  "¥ " + totalFee
+
+}
+
+// 搜索包裹
+
+function searchPackages(keyword){
+
+  keyword =
+  keyword.toLowerCase()
+
+  const result =
+
+  ALL_PACKAGES.filter(item => {
+
+    return (
+
+      (item.customer || "")
+      .toLowerCase()
+      .includes(keyword)
+
+      ||
+
+      (item.tracking_number || "")
+      .toLowerCase()
+      .includes(keyword)
+
+    )
+
+  })
+
+  renderPackages(result)
+
+}
+
+// 打开包裹弹窗
+
+function openPackageModal(){
+
+  document
+  .getElementById(
+    "packageModal"
+  )
+  .style.display =
+  "flex"
+
+}
+
+// 关闭包裹弹窗
+
+function closePackageModal(){
+
+  document
+  .getElementById(
+    "packageModal"
+  )
+  .style.display =
+  "none"
+
+}
+
+// 新增包裹
+
+async function submitPackage(){
+
+  const customer =
+  document.getElementById(
+    "packageCustomer"
+  ).value
+
+  const tracking =
+  document.getElementById(
+    "packageTracking"
+  ).value
+
+  const fee =
+  document.getElementById(
+    "packageFee"
+  ).value
+
+  const weight =
+  document.getElementById(
+    "packageWeight"
+  ).value
+
+  const status =
+  document.getElementById(
+    "packageStatus"
+  ).value
+
+  const note =
+  document.getElementById(
+    "packageNote"
+  ).value
+
+  if(!customer){
+
+    alert("请输入客户")
+
+    return
+
+  }
+
+  await api(
+
+    "/api/warehouse/create",
+
+    {
+
+      method:"POST",
+
+      body:JSON.stringify({
+
+        order_id:0,
+
+        customer,
+
+        product:"",
+
+        tracking_number:
+        tracking,
+
+        warehouse_status:
+        status,
+
+        shelf_code:"",
+
+        weight,
+
+        shipping_fee:fee,
+
+        warehouse_note:
+        note
+
+      })
+
+    }
+
+  )
+
+  closePackageModal()
+
+  loadPackages()
+
+}
+
+// 删除包裹
+
+async function deletePackage(id){
+
+  if(
+    USER.role !== "admin"
+  ){
+
+    alert(
+      "只有管理员可删除"
+    )
+
+    return
+
+  }
+
+  const ok =
+  confirm("确定删除包裹？")
+
+  if(!ok) return
+
+  await api(
+
+    "/api/warehouse/delete/" + id,
+
+    {
+      method:"DELETE"
+    }
+
+  )
+
+  loadPackages()
+
+}
+
+// 编辑包裹
+
+async function editPackage(id){
+
+  const item =
+  ALL_PACKAGES.find(
+    p => p.id == id
+  )
+
+  if(!item) return
+
+  const fee =
+  prompt(
+    "运费",
+    item.shipping_fee
+  )
+
+  const weight =
+  prompt(
+    "重量",
+    item.weight
+  )
+
+  const note =
+  prompt(
+    "备注",
+    item.warehouse_note
+  )
+
+  await api(
+
+    "/api/warehouse/update/" + id,
+
+    {
+
+      method:"PUT",
+
+      body:JSON.stringify({
+
+        warehouse_status:
+        item.warehouse_status,
+
+        shelf_code:"",
+
+        weight,
+
+        shipping_fee:fee,
+
+        warehouse_note:
+        note
+
+      })
+
+    }
+
+  )
+
+  loadPackages()
+
+}
+
+// 修改包裹状态
+
+async function changePackageStatus(id){
+
+  const item =
+  ALL_PACKAGES.find(
+    p => p.id == id
+  )
+
+  if(!item) return
+
+  const status =
+  prompt(
+
+    "输入状态",
+
+    item.warehouse_status
+
+  )
+
+  if(!status) return
+
+  await api(
+
+    "/api/warehouse/update/" + id,
+
+    {
+
+      method:"PUT",
+
+      body:JSON.stringify({
+
+        warehouse_status:
+        status,
+
+        shelf_code:"",
+
+        weight:
+        item.weight,
+
+        shipping_fee:
+        item.shipping_fee,
+
+        warehouse_note:
+        item.warehouse_note
+
+      })
+
+    }
+
+  )
+
+  loadPackages()
+
+}
+
+// =========================
+// 财务
+// =========================
+
+function updateFinance(orders){
+
+  let totalRevenue = 0
+  let totalProfit = 0
+
+  orders.forEach(order => {
+
+    totalRevenue +=
+
+    Number(
+      order.amount_cny || 0
+    )
+
+  })
+
+  totalProfit =
+  totalRevenue * 0.2
+
+  const rate =
+
+  totalRevenue > 0
+
+  ?
+
+  (
+    totalProfit
+    /
+    totalRevenue
+    * 100
+  ).toFixed(1)
+
+  :
+
+  0
+
+  document.getElementById(
+    "todayRevenue"
+  ).innerText =
+  "¥ " + totalRevenue
+
+  document.getElementById(
+    "todayOrders"
+  ).innerText =
+  orders.length
+
+  document.getElementById(
+    "monthProfit"
+  ).innerText =
+  "¥ " + totalProfit
+
+  document.getElementById(
+    "financeRevenue"
+  ).innerText =
+  "¥ " + totalRevenue
+
+  document.getElementById(
+    "financeProfit"
+  ).innerText =
+  "¥ " + totalProfit
+
+  document.getElementById(
+    "profitRate"
+  ).innerText =
+  rate + "%"
 
 }
 
@@ -1128,3 +1473,5 @@ function logout(){
 loadOrders()
 
 loadCustomers()
+
+loadPackages()
