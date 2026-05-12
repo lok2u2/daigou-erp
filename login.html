@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>ERP 登录</title>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:sans-serif;
+    }
+
+    body{
+
+      background:#0f172a;
+
+      display:flex;
+
+      justify-content:center;
+
+      align-items:center;
+
+      height:100vh;
+
+      color:white;
+
+    }
+
+    .login-box{
+
+      width:90%;
+      max-width:400px;
+
+      background:#111827;
+
+      padding:30px;
+
+      border-radius:20px;
+
+    }
+
+    h1{
+
+      text-align:center;
+
+      margin-bottom:30px;
+
+    }
+
+    .input{
+
+      width:100%;
+
+      padding:14px;
+
+      border:none;
+
+      border-radius:12px;
+
+      margin-bottom:20px;
+
+      background:#1e293b;
+
+      color:white;
+
+      font-size:16px;
+
+    }
+
+    .btn{
+
+      width:100%;
+
+      border:none;
+
+      padding:14px;
+
+      border-radius:12px;
+
+      background:#2563eb;
+
+      color:white;
+
+      font-size:16px;
+
+      cursor:pointer;
+
+    }
+
+    .error{
+
+      margin-top:15px;
+
+      color:#ef4444;
+
+      text-align:center;
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div class="login-box">
+
+    <h1>
+      中越代购 ERP
+    </h1>
+
+    <input
+
+      type="password"
+
+      id="password"
+
+      class="input"
+
+      placeholder="请输入系统密码"
+
+    />
+
+    <button
+
+      class="btn"
+
+      onclick="login()"
+
+    >
+
+      登录系统
+
+    </button>
+
+    <div
+
+      id="error"
+
+      class="error"
+
+    ></div>
+
+  </div>
+
+  <script>
+
+    // API 地址
+
+    const API =
+
+    "https://你的worker地址.workers.dev"
+
+    // 自动登录
+
+    if(
+
+      localStorage.getItem("erp_login")
+
+      ===
+
+      "true"
+
+    ){
+
+      location.href = "index.html"
+
+    }
+
+    // 登录
+
+    async function login(){
+
+      const password =
+
+      document
+      .getElementById("password")
+      .value
+
+      const res =
+
+      await fetch(
+
+        API + "/api/login",
+
+        {
+
+          method:"POST",
+
+          headers:{
+            "Content-Type":"application/json"
+          },
+
+          body:JSON.stringify({
+
+            password
+
+          })
+
+        }
+
+      )
+
+      const data =
+      await res.json()
+
+      // 成功
+
+      if(data.success){
+
+        localStorage.setItem(
+
+          "erp_login",
+
+          "true"
+
+        )
+
+        location.href = "index.html"
+
+      }
+
+      // 失败
+
+      else{
+
+        document
+        .getElementById("error")
+        .innerText =
+        "密码错误"
+
+      }
+
+    }
+
+  </script>
+
+</body>
+</html>
