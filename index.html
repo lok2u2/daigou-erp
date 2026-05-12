@@ -89,12 +89,36 @@
         SaaS ERP 管理系统
       </div>
 
-      <button
-        class="logout-btn"
-        onclick="logout()"
-      >
-        退出登录
-      </button>
+      <div class="top-actions">
+
+        <select
+          id="languageSelect"
+          onchange="changeLanguage(this.value)"
+          class="lang-select"
+        >
+
+          <option value="zh">
+            中文
+          </option>
+
+          <option value="vi">
+            Tiếng Việt
+          </option>
+
+          <option value="en">
+            English
+          </option>
+
+        </select>
+
+        <button
+          class="logout-btn"
+          onclick="logout()"
+        >
+          退出登录
+        </button>
+
+      </div>
 
     </header>
 
@@ -158,8 +182,6 @@
 
       </div>
 
-      <!-- 图表 -->
-
       <div class="chart-box">
 
         <canvas id="salesChart"></canvas>
@@ -190,16 +212,12 @@
 
       </div>
 
-      <!-- 搜索 -->
-
       <input
         type="text"
         placeholder="搜索客户 / 联系方式"
         class="search-input"
         oninput="searchCustomers(this.value)"
       />
-
-      <!-- 客户列表 -->
 
       <div id="customersList">
 
@@ -233,16 +251,12 @@
 
       </div>
 
-      <!-- 搜索 -->
-
       <input
         type="text"
         placeholder="搜索客户 / 商品 / 平台"
         class="search-input"
         oninput="searchOrders(this.value)"
       />
-
-      <!-- 订单列表 -->
 
       <div id="ordersList">
 
@@ -251,8 +265,6 @@
         </p>
 
       </div>
-
-      <!-- 历史订单 -->
 
       <h3 class="archive-title">
         历史订单
@@ -271,9 +283,31 @@
       class="page"
     >
 
-      <h2>
-        财务管理
-      </h2>
+      <div class="page-header">
+
+        <h2>
+          财务管理
+        </h2>
+
+        <div class="finance-actions">
+
+          <button
+            class="primary-btn"
+            onclick="exportCSV()"
+          >
+            导出 Excel
+          </button>
+
+          <button
+            class="primary-btn"
+            onclick="toggleTheme()"
+          >
+            深色模式
+          </button>
+
+        </div>
+
+      </div>
 
       <div class="cards">
 
@@ -307,9 +341,37 @@
 
         </div>
 
-      </div>
+        <div class="card">
 
-      <!-- 财务图表 -->
+          <div class="card-title">
+            利润率
+          </div>
+
+          <div
+            class="card-value"
+            id="profitRate"
+          >
+            0%
+          </div>
+
+        </div>
+
+        <div class="card">
+
+          <div class="card-title">
+            越南盾营业额
+          </div>
+
+          <div
+            class="card-value"
+            id="financeVND"
+          >
+            ₫ 0
+          </div>
+
+        </div>
+
+      </div>
 
       <div class="chart-box">
 
@@ -354,7 +416,7 @@
 
   </main>
 
-  <!-- 手机底部导航 -->
+  <!-- 手机导航 -->
 
   <nav class="mobile-nav">
 
