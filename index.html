@@ -1,752 +1,178 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
-
   <meta charset="UTF-8" />
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
-
-  <title>
-    中越代购 ERP
-  </title>
-
-  <!-- PWA -->
-
-  <link
-    rel="manifest"
-    href="manifest.json"
-  />
-
-  <meta
-    name="theme-color"
-    content="#111827"
-  />
-
-  <link
-    rel="apple-touch-icon"
-    href="icon-192.png"
-  />
-
-  <!-- CSS -->
-
-  <link
-    rel="stylesheet"
-    href="style.css"
-  />
-
-  <!-- Chart -->
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>中越代购 ERP V12</title>
+  <link rel="stylesheet" href="style.css"/>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 </head>
-
 <body>
 
-  <!-- 登录检测 -->
-
-  <script>
-
-    if(
-
-      localStorage.getItem(
-        "erp_login"
-      )
-
-      !==
-
-      "true"
-
-    ){
-
-      location.href =
-      "login.html"
-
-    }
-
-  </script>
-
-  <!-- 左侧菜单 -->
-
-  <aside class="sidebar">
-
-    <div class="logo">
-      中越代购 ERP
-    </div>
-
-    <div class="menu">
-
-      <button onclick="showPage('dashboard')">
-        🏠 首页
-      </button>
-
-      <button onclick="showPage('customers')">
-        👥 客户管理
-      </button>
-
-      <button onclick="showPage('orders')">
-        📦 订单管理
-      </button>
-
-      <button onclick="showPage('packages')">
-        🚚 包裹管理
-      </button>
-
-      <button onclick="showPage('finance')">
-        💰 财务管理
-      </button>
-
-      <button onclick="showPage('settings')">
-        ⚙ 系统管理
-      </button>
-
-    </div>
-
-  </aside>
-
-  <!-- 主区域 -->
-
-  <main class="main">
-
-    <!-- 顶部 -->
-
-    <header class="topbar">
-
-      <div class="top-title">
-
-        SaaS ERP 管理系统
-
-      </div>
-
-      <div class="top-actions">
-
-        <!-- 多语言 -->
-
-        <select
-          id="languageSelect"
-          onchange="changeLanguage(this.value)"
-          class="lang-select"
-        >
-
-          <option value="zh">
-            中文
-          </option>
-
-          <option value="vi">
-            Tiếng Việt
-          </option>
-
-          <option value="en">
-            English
-          </option>
-
-        </select>
-
-        <!-- 退出 -->
-
-        <button
-          class="logout-btn"
-          onclick="logout()"
-        >
-          退出登录
-        </button>
-
-      </div>
-
-    </header>
-
-    <!-- 首页 -->
-
-    <section
-      id="dashboard"
-      class="page active"
-    >
-
-      <h2>
-        首页仪表盘
-      </h2>
-
-      <div class="cards">
-
-        <div class="card">
-
-          <div class="card-title">
-            今日营业额
-          </div>
-
-          <div
-            class="card-value"
-            id="todayRevenue"
-          >
-            ¥ 0
-          </div>
-
-        </div>
-
-        <div class="card">
-
-          <div class="card-title">
-            今日订单
-          </div>
-
-          <div
-            class="card-value"
-            id="todayOrders"
-          >
-            0
-          </div>
-
-        </div>
-
-        <div class="card">
-
-          <div class="card-title">
-            本月利润
-          </div>
-
-          <div
-            class="card-value"
-            id="monthProfit"
-          >
-            ¥ 0
-          </div>
-
-        </div>
-
-      </div>
-
-      <!-- 图表 -->
-
-      <div class="chart-box">
-
-        <canvas id="salesChart"></canvas>
-
-      </div>
-
-    </section>
-
-    <!-- 客户管理 -->
-
-    <section
-      id="customers"
-      class="page"
-    >
-
-      <div class="page-header">
-
-        <h2>
-          客户管理
-        </h2>
-
-        <button
-          class="primary-btn"
-          onclick="createCustomer()"
-        >
-          + 新增客户
-        </button>
-
-      </div>
-
-      <input
-        type="text"
-        placeholder="搜索客户 / 联系方式"
-        class="search-input"
-        oninput="searchCustomers(this.value)"
-      />
-
-      <div id="customersList">
-
-        <p>
-          正在加载客户...
-        </p>
-
-      </div>
-
-    </section>
-
-    <!-- 订单管理 -->
-
-    <section
-      id="orders"
-      class="page"
-    >
-
-      <div class="page-header">
-
-        <h2>
-          订单管理
-        </h2>
-
-        <button
-          class="primary-btn"
-          onclick="openOrderModal()"
-        >
-          + 新增订单
-        </button>
-
-      </div>
-
-      <input
-        type="text"
-        placeholder="搜索客户 / 商品 / 平台"
-        class="search-input"
-        oninput="searchOrders(this.value)"
-      />
-
-      <div id="ordersList">
-
-        <p>
-          正在加载订单...
-        </p>
-
-      </div>
-
-      <h3 class="archive-title">
-        历史订单
-      </h3>
-
-      <div id="archiveOrders">
-
-      </div>
-
-    </section>
-
-    <!-- 包裹管理 -->
-
-    <section
-      id="packages"
-      class="page"
-    >
-
-      <div class="page-header">
-
-        <h2>
-          包裹管理
-        </h2>
-
-        <button
-          class="primary-btn"
-          onclick="openPackageModal()"
-        >
-          + 新增包裹
-        </button>
-
-      </div>
-
-      <input
-        type="text"
-        placeholder="搜索客户 / 快递单号"
-        class="search-input"
-        oninput="searchPackages(this.value)"
-      />
-
-      <!-- 包裹统计 -->
-
-      <div class="cards">
-
-        <div class="card">
-
-          <div class="card-title">
-            包裹总数
-          </div>
-
-          <div
-            class="card-value"
-            id="packageTotal"
-          >
-            0
-          </div>
-
-        </div>
-
-        <div class="card">
-
-          <div class="card-title">
-            已到仓
-          </div>
-
-          <div
-            class="card-value"
-            id="packageArrived"
-          >
-            0
-          </div>
-
-        </div>
-
-        <div class="card">
-
-          <div class="card-title">
-            已发货
-          </div>
-
-          <div
-            class="card-value"
-            id="packageShipped"
-          >
-            0
-          </div>
-
-        </div>
-
-        <div class="card">
-
-          <div class="card-title">
-            总运费
-          </div>
-
-          <div
-            class="card-value"
-            id="packageFeeTotal"
-          >
-            ¥ 0
-          </div>
-
-        </div>
-
-      </div>
-
-      <!-- 包裹列表 -->
-
-      <div
-        id="packagesList"
-        style="margin-top:20px;"
-      >
-
-        <p>
-          正在加载包裹...
-        </p>
-
-      </div>
-
-      <!-- 已完成 -->
-
-      <h3 class="archive-title">
-
-        已完成包裹
-
-      </h3>
-
-      <div id="packageArchive">
-
-      </div>
-
-    </section>
-
-    <!-- 财务管理 -->
-
-    <section
-      id="finance"
-      class="page"
-    >
-
-      <div class="page-header">
-
-        <h2>
-          财务管理
-        </h2>
-
-        <div class="finance-actions">
-
-          <button
-            class="primary-btn"
-            onclick="exportCSV()"
-          >
-            导出 Excel
-          </button>
-
-          <button
-            class="primary-btn"
-            onclick="toggleTheme()"
-          >
-            深色模式
-          </button>
-
-        </div>
-
-      </div>
-
-      <div class="cards">
-
-        <div class="card">
-
-          <div class="card-title">
-            总营业额
-          </div>
-
-          <div
-            class="card-value"
-            id="financeRevenue"
-          >
-            ¥ 0
-          </div>
-
-        </div>
-
-        <div class="card">
-
-          <div class="card-title">
-            总利润
-          </div>
-
-          <div
-            class="card-value"
-            id="financeProfit"
-          >
-            ¥ 0
-          </div>
-
-        </div>
-
-        <div class="card">
-
-          <div class="card-title">
-            利润率
-          </div>
-
-          <div
-            class="card-value"
-            id="profitRate"
-          >
-            0%
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="chart-box">
-
-        <canvas id="financeChart"></canvas>
-
-      </div>
-
-    </section>
-
-    <!-- 系统管理 -->
-
-    <section
-      id="settings"
-      class="page"
-    >
-
-      <h2>
-        系统管理
-      </h2>
-
-      <div class="settings-grid">
-
-        <div class="setting-card">
-          修改密码
-        </div>
-
-        <div class="setting-card">
-          多语言
-        </div>
-
-        <div class="setting-card">
-          深色模式
-        </div>
-
-        <div class="setting-card">
-          数据备份
-        </div>
-
-        <div class="setting-card">
-          PWA APP
-        </div>
-
-      </div>
-
-    </section>
-
-  </main>
-
-  <!-- 手机导航 -->
-
-  <nav class="mobile-nav">
-
-    <button onclick="showPage('dashboard')">
-      🏠
-    </button>
-
-    <button onclick="showPage('customers')">
-      👥
-    </button>
-
-    <button onclick="showPage('orders')">
-      📦
-    </button>
-
-    <button onclick="showPage('packages')">
-      🚚
-    </button>
-
-    <button onclick="showPage('finance')">
-      💰
-    </button>
-
-    <button onclick="showPage('settings')">
-      ⚙
-    </button>
-
-  </nav>
-
-  <!-- 新增订单弹窗 -->
-
-  <div
-    id="orderModal"
-    class="modal"
-  >
-
-    <div class="modal-content">
-
-      <h2>
-        新增订单
-      </h2>
-
-      <input
-        id="customerInput"
-        placeholder="客户名称"
-      />
-
-      <input
-        id="productInput"
-        placeholder="商品名称"
-      />
-
-      <input
-        id="platformInput"
-        placeholder="平台"
-      />
-
-      <input
-        id="amountInput"
-        placeholder="金额"
-        type="number"
-      />
-
-      <button
-        onclick="submitOrder()"
-        class="primary-btn"
-      >
-        保存订单
-      </button>
-
-      <button
-        onclick="closeOrderModal()"
-        class="close-btn"
-      >
-        关闭
-      </button>
-
-    </div>
-
+<!-- 登录检测 -->
+<script>
+if(localStorage.getItem("erp_login") !== "true"){
+  location.href = "login.html";
+}
+</script>
+
+<!-- 左侧菜单 -->
+<aside class="sidebar">
+  <div class="logo">中越代购 ERP</div>
+  <div class="menu">
+    <button onclick="showPage('dashboard')">🏠 首页</button>
+    <button onclick="showPage('customers')">👥 客户管理</button>
+    <button onclick="showPage('orders')">📦 订单管理</button>
+    <button onclick="showPage('packages')">🚚 包裹管理</button>
+    <button onclick="showPage('finance')">💰 财务管理</button>
+    <button onclick="showPage('settings')">⚙ 系统管理</button>
   </div>
+</aside>
 
-  <!-- 新增包裹弹窗 -->
-
-  <div
-    id="packageModal"
-    class="modal"
-  >
-
-    <div class="modal-content">
-
-      <h2>
-        新增包裹
-      </h2>
-
-      <input
-        id="packageCustomer"
-        placeholder="客户名称"
-      />
-
-      <input
-        id="packageTracking"
-        placeholder="快递单号"
-      />
-
-      <input
-        id="packageFee"
-        type="number"
-        placeholder="运费"
-      />
-
-      <input
-        id="packageWeight"
-        type="number"
-        placeholder="重量 KG"
-      />
-
-      <select id="packageStatus">
-
-        <option value="已到仓">
-          已到仓
-        </option>
-
-        <option value="已通知物流">
-          已通知物流
-        </option>
-
-        <option value="已发货">
-          已发货
-        </option>
-
-        <option value="已完成">
-          已完成
-        </option>
-
+<!-- 主区域 -->
+<main class="main">
+  <header class="topbar">
+    <div class="top-title">SaaS ERP 管理系统</div>
+    <div class="top-actions">
+      <select id="languageSelect" onchange="changeLanguage(this.value)" class="lang-select">
+        <option value="zh">中文</option>
+        <option value="vi">Tiếng Việt</option>
+        <option value="en">English</option>
       </select>
-
-      <input
-        id="packageNote"
-        placeholder="物流备注"
-      />
-
-      <button
-        class="primary-btn"
-        onclick="submitPackage()"
-      >
-        保存包裹
-      </button>
-
-      <button
-        class="close-btn"
-        onclick="closePackageModal()"
-      >
-        关闭
-      </button>
-
+      <button class="logout-btn" onclick="logout()">退出登录</button>
     </div>
+  </header>
 
+  <!-- 首页 -->
+  <section id="dashboard" class="page active">
+    <h2>首页仪表盘</h2>
+    <div class="cards">
+      <div class="card"><div class="card-title">今日营业额</div><div class="card-value" id="todayRevenue">¥ 0</div></div>
+      <div class="card"><div class="card-title">今日订单</div><div class="card-value" id="todayOrders">0</div></div>
+      <div class="card"><div class="card-title">本月利润</div><div class="card-value" id="monthProfit">¥ 0</div></div>
+    </div>
+    <div class="chart-box"><canvas id="salesChart"></canvas></div>
+  </section>
+
+  <!-- 客户管理 -->
+  <section id="customers" class="page">
+    <div class="page-header">
+      <h2>客户管理</h2>
+      <button class="primary-btn" onclick="createCustomer()">+ 新增客户</button>
+    </div>
+    <input type="text" placeholder="搜索客户 / 联系方式" class="search-input" oninput="searchCustomers(this.value)"/>
+    <div id="customersList"><p>正在加载客户...</p></div>
+  </section>
+
+  <!-- 订单管理 -->
+  <section id="orders" class="page">
+    <div class="page-header">
+      <h2>订单管理</h2>
+      <button class="primary-btn" onclick="openOrderModal()">+ 新增订单</button>
+    </div>
+    <input type="text" placeholder="搜索客户 / 商品 / 平台" class="search-input" oninput="searchOrders(this.value)"/>
+    <div id="ordersList"><p>正在加载订单...</p></div>
+    <h3 class="archive-title">历史订单</h3>
+    <div id="archiveOrders"></div>
+  </section>
+
+  <!-- 包裹管理 -->
+  <section id="packages" class="page">
+    <div class="page-header">
+      <h2>包裹管理</h2>
+      <button class="primary-btn" onclick="openPackageModal()">+ 新增包裹</button>
+    </div>
+    <input type="text" placeholder="搜索客户 / 快递单号" class="search-input" oninput="searchPackages(this.value)"/>
+    <div class="cards">
+      <div class="card"><div class="card-title">包裹总数</div><div class="card-value" id="packageTotal">0</div></div>
+      <div class="card"><div class="card-title">已到仓</div><div class="card-value" id="packageArrived">0</div></div>
+      <div class="card"><div class="card-title">已发货</div><div class="card-value" id="packageShipped">0</div></div>
+      <div class="card"><div class="card-title">总运费</div><div class="card-value" id="packageFeeTotal">¥ 0</div></div>
+    </div>
+    <div id="packagesList" style="margin-top:20px;"><p>正在加载包裹...</p></div>
+    <h3 class="archive-title">已完成包裹</h3>
+    <div id="packageArchive"></div>
+  </section>
+
+  <!-- 财务管理 -->
+  <section id="finance" class="page">
+    <div class="page-header">
+      <h2>财务管理</h2>
+      <div class="finance-actions">
+        <button class="primary-btn" onclick="exportCSV()">导出 Excel</button>
+        <button class="primary-btn" onclick="toggleTheme()">深色模式</button>
+      </div>
+    </div>
+    <div class="cards">
+      <div class="card"><div class="card-title">总营业额</div><div class="card-value" id="financeRevenue">¥ 0</div></div>
+      <div class="card"><div class="card-title">总利润</div><div class="card-value" id="financeProfit">¥ 0</div></div>
+      <div class="card"><div class="card-title">利润率</div><div class="card-value" id="profitRate">0%</div></div>
+    </div>
+    <div class="chart-box"><canvas id="financeChart"></canvas></div>
+  </section>
+
+  <!-- 系统管理 -->
+  <section id="settings" class="page">
+    <h2>系统管理</h2>
+    <div class="settings-grid">
+      <div class="setting-card">修改密码</div>
+      <div class="setting-card">多语言</div>
+      <div class="setting-card">深色模式</div>
+      <div class="setting-card">数据备份</div>
+      <div class="setting-card">PWA APP</div>
+    </div>
+  </section>
+
+</main>
+
+<!-- 手机导航 -->
+<nav class="mobile-nav">
+  <button onclick="showPage('dashboard')">🏠</button>
+  <button onclick="showPage('customers')">👥</button>
+  <button onclick="showPage('orders')">📦</button>
+  <button onclick="showPage('packages')">🚚</button>
+  <button onclick="showPage('finance')">💰</button>
+  <button onclick="showPage('settings')">⚙</button>
+</nav>
+
+<!-- 弹窗 -->
+<div id="orderModal" class="modal">
+  <div class="modal-content">
+    <h2>新增订单</h2>
+    <input id="customerInput" placeholder="客户名称"/>
+    <input id="productInput" placeholder="商品名称"/>
+    <input id="platformInput" placeholder="平台"/>
+    <input id="amountInput" placeholder="金额" type="number"/>
+    <button onclick="submitOrder()" class="primary-btn">保存订单</button>
+    <button onclick="closeOrderModal()" class="close-btn">关闭</button>
   </div>
+</div>
 
-  <!-- app.js -->
+<div id="packageModal" class="modal">
+  <div class="modal-content">
+    <h2>新增包裹</h2>
+    <input id="packageCustomer" placeholder="客户名称"/>
+    <input id="packageTracking" placeholder="快递单号"/>
+    <input id="packageFee" type="number" placeholder="运费"/>
+    <input id="packageWeight" type="number" placeholder="重量 KG"/>
+    <select id="packageStatus">
+      <option value="已到仓">已到仓</option>
+      <option value="已通知物流">已通知物流</option>
+      <option value="已发货">已发货</option>
+      <option value="已完成">已完成</option>
+    </select>
+    <input id="packageNote" placeholder="物流备注"/>
+    <button class="primary-btn" onclick="submitPackage()">保存包裹</button>
+    <button class="close-btn" onclick="closePackageModal()">关闭</button>
+  </div>
+</div>
 
-  <script src="app.js"></script>
-
-  <!-- PWA -->
-
-  <script>
-
-    if(
-      "serviceWorker"
-      in navigator
-    ){
-
-      navigator
-      .serviceWorker
-      .register(
-        "./service-worker.js"
-      )
-
-    }
-
-  </script>
+<script src="app.js"></script>
+<script>
+  if("serviceWorker" in navigator){
+    navigator.serviceWorker.register("./service-worker.js");
+  }
+</script>
 
 </body>
 </html>
