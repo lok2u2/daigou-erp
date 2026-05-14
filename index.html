@@ -15,12 +15,12 @@
   <div class="sidebar">
     <div class="logo">中越代购 ERP</div>
     <div class="menu">
-      <button data-tab="dashboard" onclick="showTab(this)">🏠 首页</button>
-      <button data-tab="orders" onclick="showTab(this)">📦 订单管理</button>
-      <button data-tab="customers" onclick="showTab(this)">👥 客户管理</button>
-      <button data-tab="warehouse" onclick="showTab(this)">🚚 包裹管理</button>
-      <button data-tab="finance" onclick="showTab(this)">💰 财务管理</button>
-      <button data-tab="system" onclick="showTab(this)">⚙ 系统管理</button>
+      <button data-tab="dashboard">🏠 首页</button>
+      <button data-tab="orders">📦 订单管理</button>
+      <button data-tab="customers">👥 客户管理</button>
+      <button data-tab="warehouse">🚚 包裹管理</button>
+      <button data-tab="finance">💰 财务管理</button>
+      <button data-tab="system">⚙ 系统管理</button>
     </div>
   </div>
 
@@ -43,7 +43,7 @@
     <!-- 订单管理 -->
     <div id="orders" class="module hidden">
       <h2>订单管理</h2>
-      <button class="btn btn-primary" onclick="openOrderModal()">+ 新增订单</button>
+      <button class="btn btn-primary" id="openOrderBtn">+ 新增订单</button>
       <div id="orderList" class="table"></div>
     </div>
 
@@ -88,8 +88,8 @@
     <input id="shipping_cost" placeholder="国际物流成本">
     <input id="note" placeholder="备注">
     <div class="modal-actions">
-      <button class="btn btn-primary" onclick="saveOrder()">保存订单</button>
-      <button class="btn btn-danger" onclick="closeModal()">关闭</button>
+      <button class="btn btn-primary" id="saveOrderBtn">保存订单</button>
+      <button class="btn btn-danger" id="closeModalBtn">关闭</button>
     </div>
   </div>
 </div>
