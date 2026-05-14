@@ -25,9 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadCustomers();
 });
 
-// 加载客户列表
 async function loadCustomers() {
-  // 可替换为真实 API
   const res = await fetch(CUSTOMER_API);
   customers = await res.json();
   const box = document.getElementById('customerList');
@@ -49,7 +47,6 @@ async function loadCustomers() {
   });
 }
 
-// 搜索过滤客户
 function filterCustomers() {
   const name = document.getElementById('filter_customer_name').value.toLowerCase();
   const contact = document.getElementById('filter_customer_contact').value.toLowerCase();
