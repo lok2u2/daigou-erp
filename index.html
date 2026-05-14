@@ -5,12 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>中越代购 SaaS ERP V13</title>
 <link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
 <div class="app">
-
   <!-- 左侧菜单 -->
   <div class="sidebar">
     <div class="logo">中越代购 ERP</div>
@@ -26,53 +24,19 @@
 
   <!-- 主区域 -->
   <div class="main">
-
-    <!-- 首页 -->
     <div id="dashboard" class="module">
       <h2>首页仪表盘</h2>
-      <div class="cards">
-        <div class="card"><div class="card-title">今日营业额</div><div class="card-value" id="todayRevenue">¥0</div></div>
-        <div class="card"><div class="card-title">今日利润</div><div class="card-value" id="todayProfit">¥0</div></div>
-        <div class="card"><div class="card-title">今日订单</div><div class="card-value" id="todayOrders">0</div></div>
-        <div class="card"><div class="card-title">待处理订单</div><div class="card-value" id="pendingOrders">0</div></div>
-        <div class="card"><div class="card-title">待发货包裹</div><div class="card-value" id="pendingPackages">0</div></div>
-        <div class="card"><div class="card-title">本月利润</div><div class="card-value" id="monthProfit">¥0</div></div>
-      </div>
     </div>
-
-    <!-- 订单管理 -->
     <div id="orders" class="module hidden">
       <h2>订单管理</h2>
-      <button class="btn btn-primary" id="openOrderBtn">+ 新增订单</button>
-      <div id="orderList" class="table"></div>
+      <button id="openOrderBtn" class="btn btn-primary">+ 新增订单</button>
+      <div id="orderList"></div>
     </div>
-
-    <!-- 客户管理 -->
-    <div id="customers" class="module hidden">
-      <h2>客户管理</h2>
-      <div id="customerList" class="table"></div>
-    </div>
-
-    <!-- 包裹管理 -->
-    <div id="warehouse" class="module hidden">
-      <h2>包裹管理</h2>
-      <div id="warehouseList" class="table"></div>
-    </div>
-
-    <!-- 财务管理 -->
-    <div id="finance" class="module hidden">
-      <h2>财务管理</h2>
-      <div id="financeBox"></div>
-    </div>
-
-    <!-- 系统管理 -->
-    <div id="system" class="module hidden">
-      <h2>系统管理</h2>
-      <p>功能开发中...</p>
-    </div>
-
+    <div id="customers" class="module hidden"><h2>客户管理</h2></div>
+    <div id="warehouse" class="module hidden"><h2>包裹管理</h2></div>
+    <div id="finance" class="module hidden"><h2>财务管理</h2></div>
+    <div id="system" class="module hidden"><h2>系统管理</h2></div>
   </div>
-
 </div>
 
 <!-- 新增订单弹窗 -->
@@ -81,15 +45,15 @@
     <h3>新增订单</h3>
     <input id="customer" placeholder="客户名称">
     <input id="product" placeholder="商品名称">
-    <input id="platform" placeholder="平台（淘宝）">
+    <input id="platform" placeholder="平台">
     <input id="amount" placeholder="订单金额">
     <input id="taobao_tracking" placeholder="淘宝物流单号">
     <input id="purchase_cost" placeholder="采购成本">
     <input id="shipping_cost" placeholder="国际物流成本">
     <input id="note" placeholder="备注">
     <div class="modal-actions">
-      <button class="btn btn-primary" id="saveOrderBtn">保存订单</button>
-      <button class="btn btn-danger" id="closeModalBtn">关闭</button>
+      <button id="saveOrderBtn" class="btn btn-primary">保存订单</button>
+      <button id="closeModalBtn" class="btn btn-danger">关闭</button>
     </div>
   </div>
 </div>
