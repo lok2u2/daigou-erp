@@ -9,11 +9,11 @@ function showTab(btn){
   document.getElementById(tab).classList.remove('hidden');
 }
 
-// 打开/关闭新增订单弹窗
+// 弹窗操作
 function openOrderModal(){document.getElementById('modal').classList.remove('hidden');}
 function closeModal(){document.getElementById('modal').classList.add('hidden');}
 
-// 加载订单列表
+// 加载订单
 async function loadOrders(){
   const res = await fetch(`${API}/api/orders`);
   orders = await res.json();
