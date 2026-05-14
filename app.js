@@ -1,10 +1,9 @@
 const API = "https://apibuy.okla.de5.net";
-let orders = [];
+let orders=[];
 
-// 确保 DOM 完全加载
 document.addEventListener('DOMContentLoaded', ()=>{
 
-  // 左侧菜单切换
+  // 模块切换
   document.querySelectorAll('.menu button').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const tab = btn.dataset.tab;
@@ -13,13 +12,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
     });
   });
 
-  // 弹窗控制
   const modal = document.getElementById('modal');
   const openBtn = document.getElementById('openOrderBtn');
   const closeBtn = document.getElementById('closeModalBtn');
   const saveBtn = document.getElementById('saveOrderBtn');
 
-  // 初始隐藏弹窗
+  // 弹窗初始隐藏
   modal.classList.add('hidden');
 
   // 打开弹窗
@@ -46,7 +44,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify(body)
     });
-    modal.classList.add('hidden'); // 保存后关闭
+    modal.classList.add('hidden'); // 保存后关闭弹窗
     loadOrders();
   });
 
@@ -57,7 +55,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
   loadOrders();
 });
 
-// 加载订单列表
 async function loadOrders(){
   const res = await fetch(`${API}/api/orders`);
   orders = await res.json();
@@ -67,14 +64,13 @@ async function loadOrders(){
   orders.forEach(o=>{
     const profit = (o.amount_cny||0) - (o.purchase_cost||0) - (o.shipping_cost||0);
     const div = document.createElement('div');
-    div.className = 'order-row';
+    div.className='order-row';
     div.innerHTML = `<div>${o.customer}</div><div>${o.product}</div><div>￥${o.amount_cny}</div><div>利润:￥${profit}</div><div>${o.taobao_tracking||'-'}</div>
-      <div><button onclick="copyNotify(${o.id})">复制通知</button></div>`;
+    <div><button onclick="copyNotify(${o.id})">复制通知</button></div>`;
     box.appendChild(div);
   });
 }
 
-// 一键复制物流通知
 function copyNotify(id){
   const o = orders.find(x=>x.id===id);
   if(!o) return;
