@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>中越代购 SaaS ERP V13</title>
+<title>中越代购 ERP V13</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
   <div class="sidebar">
     <div class="logo">中越代购 ERP</div>
     <div class="menu">
-      <button data-tab="dashboard">🏠 首页</button>
+      <button data-tab="dashboard" class="active">🏠 首页</button>
       <button data-tab="orders">📦 订单管理</button>
       <button data-tab="customers">👥 客户管理</button>
       <button data-tab="warehouse">🚚 包裹管理</button>
@@ -27,37 +27,20 @@
     <div id="dashboard" class="module">
       <h2>首页仪表盘</h2>
     </div>
-    <div id="orders" class="module hidden">
-      <h2>订单管理</h2>
-      <button id="openOrderBtn" class="btn btn-primary">+ 新增订单</button>
-      <div id="orderList"></div>
-    </div>
-    <div id="customers" class="module hidden"><h2>客户管理</h2></div>
-    <div id="warehouse" class="module hidden"><h2>包裹管理</h2></div>
-    <div id="finance" class="module hidden"><h2>财务管理</h2></div>
-    <div id="system" class="module hidden"><h2>系统管理</h2></div>
+    <div id="orders" class="module hidden"></div>
+    <div id="customers" class="module hidden"></div>
+    <div id="warehouse" class="module hidden"></div>
+    <div id="finance" class="module hidden"></div>
+    <div id="system" class="module hidden"></div>
   </div>
 </div>
 
-<!-- 新增订单弹窗 -->
-<div id="modal" class="modal hidden">
-  <div class="modal-box">
-    <h3>新增订单</h3>
-    <input id="customer" placeholder="客户名称">
-    <input id="product" placeholder="商品名称">
-    <input id="platform" placeholder="平台">
-    <input id="amount" placeholder="订单金额">
-    <input id="taobao_tracking" placeholder="淘宝物流单号">
-    <input id="purchase_cost" placeholder="采购成本">
-    <input id="shipping_cost" placeholder="国际物流成本">
-    <input id="note" placeholder="备注">
-    <div class="modal-actions">
-      <button id="saveOrderBtn" class="btn btn-primary">保存订单</button>
-      <button id="closeModalBtn" class="btn btn-danger">关闭</button>
-    </div>
-  </div>
-</div>
+<script src="js/app.js" defer></script>
+<script src="js/orders.js" defer></script>
+<script src="js/customers.js" defer></script>
+<script src="js/warehouse.js" defer></script>
+<script src="js/finance.js" defer></script>
+<script src="js/system.js" defer></script>
 
-<script src="app.js" defer></script>
 </body>
 </html>
