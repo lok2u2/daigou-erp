@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
     <div id="systemList" class="table"></div>
   `;
 
-  // 示例：刷新系统状态
   container.querySelector('.btn-primary').addEventListener('click', () => {
     alert('系统状态刷新（可对接 Worker API 获取实时状态）');
   });
