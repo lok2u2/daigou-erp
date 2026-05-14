@@ -24,13 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
   `);
 
-  // DOM 元素
+  // 获取 DOM 元素
   const modal = document.getElementById('modal');
   const openBtn = document.getElementById('openOrderBtn');
   const closeBtn = document.getElementById('closeModalBtn');
   const saveBtn = document.getElementById('saveOrderBtn');
 
-  // 弹窗控制
+  // 打开/关闭弹窗
   modal.classList.add('hidden');
   openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
   closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
@@ -66,10 +66,11 @@ document.addEventListener('DOMContentLoaded', () => {
     loadOrders();
   });
 
+  // 默认加载订单
   loadOrders();
 });
 
-// 加载订单
+// 加载订单列表
 async function loadOrders() {
   const res = await fetch(`${API}/api/orders`);
   orders = await res.json();
