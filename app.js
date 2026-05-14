@@ -4,22 +4,32 @@ let orders = [];
 let customers = [];
 let warehouse = [];
 
-// 模块切换
-document.querySelectorAll('.menu button').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    const tab = btn.dataset.tab;
-    document.querySelectorAll('.module').forEach(m=>m.classList.add('hidden'));
-    document.getElementById(tab).classList.remove('hidden');
+// DOM 完全加载后再绑定
+document.addEventListener('DOMContentLoaded', ()=>{
+  const modal = document.getElementById('modal');
+
+  // 左侧菜单切换模块
+  document.querySelectorAll('.menu button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const tab = btn.dataset.tab;
+      document.querySelectorAll('.module').forEach(m=>m.classList.add('hidden'));
+      document.getElementById(tab).classList.remove('hidden');
+    });
   });
+
+  // 弹窗打开/关闭
+  document.getElementById('openOrderBtn').addEventListener('click', ()=> modal.classList.remove('hidden'));
+  document.getElementById('closeModalBtn').addEventListener('click', ()=> modal.classList.add('hidden'));
+  document.getElementById('saveOrderBtn').addEventListener('click', saveOrder);
+
+  // 默认显示首页
+  document.querySelector('[data-tab="dashboard"]').click();
+
+  // 加载数据
+  loadOrders();
 });
 
-// 弹窗控制
-const modal = document.getElementById('modal');
-document.getElementById('openOrderBtn').addEventListener('click', ()=> modal.classList.remove('hidden'));
-document.getElementById('closeModalBtn').addEventListener('click', ()=> modal.classList.add('hidden'));
-document.getElementById('saveOrderBtn').addEventListener('click', saveOrder);
-
-// 订单管理
+// 加载订单列表
 async function loadOrders(){
   const res = await fetch(`${API}/api/orders`);
   orders = await res.json();
@@ -38,22 +48,22 @@ async function loadOrders(){
 // 保存订单
 async function saveOrder(){
   const body = {
-    customer: document.getElementById("customer").value,
-    product: document.getElementById("product").value,
-    platform: document.getElementById("platform").value,
-    amount_cny: Number(document.getElementById("amount").value),
-    taobao_tracking: document.getElementById("taobao_tracking").value,
-    purchase_cost: Number(document.getElementById("purchase_cost").value),
-    shipping_cost: Number(document.getElementById("shipping_cost").value),
-    note: document.getElementById("note").value,
-    status: "待处理"
+    customer:document.getElementById("customer").value,
+    product:document.getElementById("product").value,
+    platform:document.getElementById("platform").value,
+    amount_cny:Number(document.getElementById("amount").value),
+    taobao_tracking:document.getElementById("taobao_tracking").value,
+    purchase_cost:Number(document.getElementById("purchase_cost").value),
+    shipping_cost:Number(document.getElementById("shipping_cost").value),
+    note:document.getElementById("note").value,
+    status:"待处理"
   };
   await fetch(`${API}/api/orders/create`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-  modal.classList.add('hidden');
+  document.getElementById('modal').classList.add('hidden');
   loadOrders();
 }
 
-// 一键复制通知
+// 复制物流通知
 function copyNotify(id){
   const o = orders.find(x=>x.id===id);
   if(!o) return;
@@ -66,9 +76,3 @@ function copyNotify(id){
   navigator.clipboard.writeText(text);
   alert('已复制物流通知');
 }
-
-// 初始化
-window.addEventListener('DOMContentLoaded', ()=>{
-  document.querySelector('[data-tab="dashboard"]').click();
-  loadOrders();
-});
