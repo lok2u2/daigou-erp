@@ -5,11 +5,7 @@ body{margin:0;font-family:Arial,sans-serif;background:#071122;color:#fff;}
 .menu button{width:100%;margin:8px 0;padding:14px;background:#13213a;color:#fff;border:none;border-radius:12px;text-align:left;cursor:pointer;transition:0.3s;}
 .menu button:hover{background:#2357ff;}
 .module{display:block;}
-.hidden{display:none;}
-.cards{display:grid;grid-template-columns:repeat(6,1fr);gap:18px;margin-bottom:25px;}
-.card{background:#0d1b34;border-radius:22px;padding:20px;border:1px solid rgba(255,255,255,0.05);}
-.card-title{color:#9ca8c7;margin-bottom:10px;}
-.card-value{font-size:28px;font-weight:bold;}
+.hidden{display:none !important;} /* 强制隐藏 */
 .table{margin-top:20px;}
 .table div{padding:12px;border-bottom:1px solid rgba(255,255,255,0.05);}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:999;}
