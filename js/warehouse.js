@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
   loadPackages();
 });
 
-// 加载包裹列表
 async function loadPackages() {
   const res = await fetch(WAREHOUSE_API);
   packages = await res.json();
@@ -49,7 +48,6 @@ async function loadPackages() {
   });
 }
 
-// 搜索过滤包裹
 function filterPackages() {
   const order = document.getElementById('filter_package_order').value.toLowerCase();
   const tracking = document.getElementById('filter_package_tracking').value.toLowerCase();
