@@ -1,153 +1,139 @@
-/* 全局基础 */
+/* 全局样式 */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #071122;
-  color: #fff;
-}
-
-.app {
-  display: flex;
-  min-height: 100vh;
+  background: #0d1b34;
+  color: #ffffff;
 }
 
 /* 左侧菜单 */
-.sidebar {
-  width: 230px;
-  background: #08152b;
-  padding: 25px 15px;
+#sidebar {
+  width: 200px;
+  background: #071026;
+  float: left;
+  height: 100vh;
 }
 
-.logo {
-  font-size: 34px;
-  font-weight: 700;
-  margin-bottom: 35px;
+#sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-.menu button {
-  width: 100%;
-  margin: 8px 0;
-  padding: 14px;
-  background: #13213a;
-  color: #fff;
-  border: none;
-  border-radius: 12px;
-  text-align: left;
+#sidebar li {
+  padding: 15px;
   cursor: pointer;
-  transition: 0.3s;
+  border-bottom: 1px solid #0a1530;
 }
 
-.menu button.active {
-  background: #2357ff;
+#sidebar li:hover {
+  background: #0b1a3c;
 }
 
-.menu button:hover {
-  background: #2357ff;
+#sidebar li.active {
+  background: #1e90ff;
 }
 
-/* 主模块 */
+/* 主内容区 */
+#main {
+  margin-left: 200px;
+  padding: 20px;
+}
+
+/* 模块通用 */
+.module.hidden {
+  display: none;
+}
+
 .module {
-  display: block;
-  padding: 20px;
-}
-
-.hidden {
-  display: none !important;
-}
-
-/* 表格/列表样式 */
-.table {
-  margin-top: 20px;
-  border-collapse: collapse;
-  width: 100%;
-}
-
-.table div {
-  padding: 12px;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-}
-
-.order-row {
+  padding: 10px;
   background: #0d1b34;
   border-radius: 12px;
-  padding: 10px;
-  margin-bottom: 8px;
-  border: 1px solid rgba(255,255,255,0.05);
 }
 
-.package-list {
-  margin-left: 20px;
-  background: #172744;
-  padding: 6px;
-  margin-top: 4px;
-  border-radius: 6px;
-}
-
-/* 弹窗 */
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.55);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-}
-
-.modal-box {
-  width: 500px;
-  background: #101c33;
-  border-radius: 18px;
-  padding: 24px;
-  border: 1px solid rgba(255,255,255,0.06);
-}
-
-.modal input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 12px;
-  border-radius: 8px;
+/* 按钮样式 */
+button {
+  padding: 6px 12px;
+  margin: 2px;
   border: none;
-  background: #172744;
-  color: #fff;
-  outline: none;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 12px;
-}
-
-/* 按钮 */
-.btn {
-  border: none;
-  border-radius: 10px;
-  padding: 8px 14px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: 0.3s;
 }
 
-.btn-primary { background: #3b82f6; color: #fff; }
-.btn-secondary { background: #555; color: #fff; }
-.btn-danger { background: #ff5b5b; color: #fff; }
-.btn:hover { opacity: 0.9; }
-
-/* 首页仪表盘 */
-.dashboard-cards {
-  display: flex;
-  gap: 15px;
-  margin: 20px 0;
-  flex-wrap: wrap;
+button.btn-primary {
+  background: #1e90ff;
+  color: #fff;
 }
 
-.dashboard-cards .card {
-  background: #0d1b34;
-  border-radius: 12px;
-  padding: 20px;
-  flex: 1;
-  min-width: 150px;
+button.btn-danger {
+  background: #ff4d4f;
+  color: #fff;
+}
+
+/* 输入框、下拉框 */
+input, select {
+  padding: 5px;
+  margin: 2px;
+  border-radius: 4px;
+  border: none;
+  background: #0b1a3c;
+  color: #fff;
+}
+
+/* 卡片/表格容器 */
+.table {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* 订单表格 */
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.order-table th, .order-table td {
+  border: 1px solid #0a1530;
+  padding: 8px;
   text-align: center;
-  font-size: 18px;
-  font-weight: bold;
-  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.order-table th {
+  background-color: #0b1a3c;
+  color: #ffffff;
+}
+
+.order-table tr:nth-child(even) {
+  background-color: #0d1b34;
+}
+
+.order-table tr:nth-child(odd) {
+  background-color: #0c1830;
+}
+
+/* flex 行布局（可用于其他模块列表） */
+.flex-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 1px solid #0a1530;
+}
+
+.flex-row > div {
+  flex: 1;          /* 每列平均分配宽度 */
+  text-align: center;
+}
+
+/* 表头标题 */
+h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+/* 占位空表提示 */
+.module p {
+  padding: 10px;
+  text-align: center;
+  color: #ccc;
 }
