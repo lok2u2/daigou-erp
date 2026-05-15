@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const closeBtn = document.getElementById('closeModalBtn');
   const saveBtn = document.getElementById('saveOrderBtn');
 
-  // 打开/关闭弹窗
+  // 弹窗控制
   modal.classList.add('hidden');
   openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
   closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
@@ -66,7 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
     loadOrders();
   });
 
-  // 默认加载订单
   loadOrders();
 });
 
