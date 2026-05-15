@@ -1,4 +1,4 @@
-const ORDERS_API = "https://apibuy.okla.de5.net/api/orders"; // 使用你自己的 Worker API 地址
+const ORDERS_API = "https://apibuy.okla.de5.net/api/orders"; // 替换成你的 Worker API 地址
 
 async function loadOrders() {
   const box = document.getElementById('orders');
@@ -14,33 +14,31 @@ async function loadOrders() {
       return;
     }
 
-    // 创建表格头
-    const table = document.createElement('div');
-    table.className = 'table';
+    // 创建表格
+    const table = document.createElement('table');
+    table.className = 'order-table';
     table.innerHTML = `
-      <div class="order-row">
-        <strong>订单号</strong>
-        <strong>客户</strong>
-        <strong>商品</strong>
-        <strong>平台</strong>
-        <strong>数量</strong>
-        <strong>金额(CNY)</strong>
-        <strong>状态</strong>
-      </div>
+      <tr>
+        <th>订单号</th>
+        <th>客户</th>
+        <th>商品</th>
+        <th>平台</th>
+        <th>数量</th>
+        <th>金额(CNY)</th>
+        <th>状态</th>
+      </tr>
     `;
 
-    // 渲染每条订单
     data.forEach(o => {
-      const row = document.createElement('div');
-      row.className = 'order-row';
+      const row = document.createElement('tr');
       row.innerHTML = `
-        <div>${o.system_order_id || '-'}</div>
-        <div>${o.customer || '-'}</div>
-        <div>${o.product || '-'}</div>
-        <div>${o.platform || '-'}</div>
-        <div>${o.quantity || 0}</div>
-        <div>${o.amount_cny || 0}</div>
-        <div>${o.status || '-'}</div>
+        <td>${o.system_order_id || '-'}</td>
+        <td>${o.customer || '-'}</td>
+        <td>${o.product || '-'}</td>
+        <td>${o.platform || '-'}</td>
+        <td>${o.quantity || 0}</td>
+        <td>${o.amount_cny || 0}</td>
+        <td>${o.status || '-'}</td>
       `;
       table.appendChild(row);
     });
