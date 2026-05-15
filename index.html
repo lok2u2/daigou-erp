@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>中越代购 ERP V13</title>
 <link rel="stylesheet" href="style.css">
+<!-- 引入 Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -24,9 +26,22 @@
 
   <!-- 主区域 -->
   <div class="main">
+    <!-- 首页仪表盘 -->
     <div id="dashboard" class="module">
       <h2>首页仪表盘</h2>
+
+      <!-- KPI 卡片 -->
+      <div class="dashboard-cards">
+        <div class="card">本月订单数：<span id="dash_order_count">0</span></div>
+        <div class="card">本月已发货：<span id="dash_shipped_count">0</span></div>
+        <div class="card">本月利润：<span id="dash_profit">0</span></div>
+        <div class="card">总客户数：<span id="dash_customer_count">0</span></div>
+      </div>
+
+      <!-- 订单状态饼图 -->
+      <canvas id="dash_chart" width="400" height="200"></canvas>
     </div>
+
     <div id="orders" class="module hidden"></div>
     <div id="customers" class="module hidden"></div>
     <div id="warehouse" class="module hidden"></div>
@@ -35,12 +50,14 @@
   </div>
 </div>
 
+<!-- 引入模块化 JS -->
 <script src="js/app.js" defer></script>
 <script src="js/orders.js" defer></script>
 <script src="js/customers.js" defer></script>
 <script src="js/warehouse.js" defer></script>
 <script src="js/finance.js" defer></script>
 <script src="js/system.js" defer></script>
+<script src="js/dashboard.js" defer></script>
 
 </body>
 </html>
